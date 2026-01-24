@@ -1,6 +1,9 @@
 package blocklang;
 
 import static com.raylib.Raylib.*;
+
+import blocklang.blocks.*;
+
 import static com.raylib.Colors.*;
 
 public class Main {
@@ -17,6 +20,10 @@ public class Main {
             .target(Vector2Zero())
             .rotation(0.0f)
             .zoom(1.0f);
+
+        // Blocks
+        Block startBlock = new StartBlock(100.f, 100.f);
+        Block stopBlock = new StopBlock(100.f, 150.f);
 
         SetTargetFPS(60);
 
@@ -42,7 +49,8 @@ public class Main {
             BeginDrawing();
                 ClearBackground(RAYWHITE);
                 BeginMode2D(camera);
-                DrawRectangle(0, 0, 100, 200, RED);
+                startBlock.draw();
+                stopBlock.draw();
                 EndMode2D();
             EndDrawing();
         }
