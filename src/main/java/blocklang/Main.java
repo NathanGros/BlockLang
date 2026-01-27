@@ -2,8 +2,6 @@ package blocklang;
 
 import static com.raylib.Raylib.*;
 
-import blocklang.blocks.*;
-
 import static com.raylib.Colors.*;
 
 public class Main {
@@ -11,6 +9,9 @@ public class Main {
         // Initialization
         int screenWidth = 800;
         int screenHeight = 450;
+
+        BlockView blockView = new BlockView();
+        BlockRunner.run(blockView.getRoots());
 
         SetConfigFlags(FLAG_MSAA_4X_HINT);
         InitWindow(screenWidth, screenHeight, "BlockLang");
@@ -20,10 +21,6 @@ public class Main {
             .target(Vector2Zero())
             .rotation(0.0f)
             .zoom(1.0f);
-
-        // Blocks
-        Block startBlock = new StartBlock(100.f, 100.f);
-        Block stopBlock = new StopBlock(100.f, 150.f);
 
         SetTargetFPS(60);
 
@@ -49,8 +46,7 @@ public class Main {
             BeginDrawing();
                 ClearBackground(RAYWHITE);
                 BeginMode2D(camera);
-                startBlock.draw();
-                stopBlock.draw();
+                blockView.drawAll();
                 EndMode2D();
             EndDrawing();
         }

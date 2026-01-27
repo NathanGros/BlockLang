@@ -1,16 +1,16 @@
 package blocklang.blocks;
 
-import static com.raylib.Colors.RED;
+import static com.raylib.Colors.YELLOW;
 import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Rectangle;
 
 /**
- * StopBlock
+ * DummyBlock
  */
-public class StopBlock extends Block {
-    public StopBlock(Float x, Float y) {
-        super(BlockType.STOP, x, y, 150.f, 30.f);
+public class DummyBlock extends Block {
+    public DummyBlock(Float x, Float y) {
+        super(BlockType.DUMMY, x, y, 200.f, 30.f);
     }
 
 	@Override
@@ -20,6 +20,6 @@ public class StopBlock extends Block {
         shape.y(posY);
         shape.width(width);
         shape.height(height);
-        DrawRectangleRounded(shape, 0.6f, 5, RED);
+        DrawRectangleRounded(shape, 0.6f, 5, YELLOW);
 	}
 }
