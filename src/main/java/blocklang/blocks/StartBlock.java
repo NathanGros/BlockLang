@@ -12,6 +12,9 @@ public class StartBlock extends Block {
     public StartBlock(Float x, Float y) {
         super(BlockType.START, x, y, 180.f, 30.f);
     }
+    public StartBlock() {
+        this(0.f, 0.f);
+    }
 
 	@Override
 	public void draw() {

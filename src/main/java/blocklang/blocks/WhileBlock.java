@@ -16,9 +16,22 @@ public class WhileBlock extends Block {
         super(BlockType.WHILE, x, y, 100.f, 30.f);
         condition = true;
     }
+    public WhileBlock() {
+        this(0.f, 0.f);
+    }
 
     public void setInBlock(Block inBlock) {
+        inBlock.setPosX(this.posX + INDENTATION);
+        inBlock.setPosY(this.posY + this.height);
         this.inBlock = inBlock;
+    }
+    @Override
+    public void setNextBlock(Block nextBlock) throws InvalidBlockException {
+        if (!nextBlock.getBlockType().equals(BlockType.CLOSING_BLOCK))
+            throw new InvalidBlockException(nextBlock + " should be a closing block");
+        nextBlock.setPosX(this.posX);
+        nextBlock.setPosY(this.posY + this.height);
+        this.nextBlock = nextBlock;
     }
     public Block getInBlock() {
         return inBlock;
@@ -50,7 +63,7 @@ public class WhileBlock extends Block {
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (condition)
+        if (hasInBlock() && condition)
             inBlock.runWithChildren();
         else
             nextBlock.runWithChildren();

@@ -10,7 +10,10 @@ import com.raylib.Raylib.Rectangle;
  */
 public class WhileBlockBottom extends Block {
     public WhileBlockBottom(Float x, Float y) {
-        super(BlockType.WHILE, x, y, 100.f, 30.f);
+        super(BlockType.CLOSING_BLOCK, x, y, 100.f, 30.f);
+    }
+    public WhileBlockBottom() {
+        this(0.f, 0.f);
     }
 
 	@Override

@@ -12,6 +12,9 @@ public class DummyBlock extends Block {
     public DummyBlock(Float x, Float y) {
         super(BlockType.DUMMY, x, y, 200.f, 30.f);
     }
+    public DummyBlock() {
+        this(0.f, 0.f);
+    }
 
 	@Override
 	public void draw() {

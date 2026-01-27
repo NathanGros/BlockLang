@@ -12,6 +12,9 @@ public class StopBlock extends Block {
     public StopBlock(Float x, Float y) {
         super(BlockType.STOP, x, y, 150.f, 30.f);
     }
+    public StopBlock() {
+        this(0.f, 0.f);
+    }
 
 	@Override
 	public void draw() {

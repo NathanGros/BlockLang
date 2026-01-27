@@ -13,19 +13,23 @@ public class BlockView {
 
     public BlockView() {
         roots = new ArrayList<>();
-        StartBlock startBlock = new StartBlock(100.f, 100.f);
-        DummyBlock dummyBlock1 = new DummyBlock(100.f, 130.f);
-        WhileBlock whileBlock = new WhileBlock(100.f, 160.f);
-        WhileBlockBottom whileBlockBottom = new WhileBlockBottom(100.f, 220.f);
-        DummyBlock dummyBlock2 = new DummyBlock(100.f, 190.f);
-        StopBlock stopBlock = new StopBlock(100.f, 250.f);
-        startBlock.setNextBlock(dummyBlock1);
-        dummyBlock1.setNextBlock(whileBlock);
-        whileBlock.setInBlock(dummyBlock2);
-        dummyBlock2.setNextBlock(whileBlockBottom);
-        whileBlock.setNextBlock(whileBlockBottom);
-        whileBlockBottom.setNextBlock(stopBlock);
-        roots.add(startBlock);
+        StartBlock startBlock = new StartBlock(0.f, 0.f);
+        DummyBlock dummyBlock1 = new DummyBlock();
+        WhileBlock whileBlock = new WhileBlock();
+        WhileBlockBottom whileBlockBottom = new WhileBlockBottom();
+        DummyBlock dummyBlock2 = new DummyBlock();
+        StopBlock stopBlock = new StopBlock();
+        try {
+            startBlock.setNextBlock(dummyBlock1);
+            dummyBlock1.setNextBlock(whileBlock);
+            // whileBlock.setInBlock(dummyBlock2);
+            whileBlock.setNextBlock(whileBlockBottom);
+            // dummyBlock2.setNextBlock(whileBlockBottom);
+            whileBlockBottom.setNextBlock(stopBlock);
+            roots.add(startBlock);
+        } catch (InvalidBlockException e) {
+            System.out.println("Error: " + e);
+        }
     }
 
     public List<Block> getRoots() {
