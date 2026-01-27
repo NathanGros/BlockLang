@@ -8,15 +8,12 @@ import blocklang.blocks.*;
  * BlockRunner
  */
 public class BlockRunner {
-    public static void run(List<Block> blocks) {
-        for (Block block: blocks) {
-            if (!(block instanceof StartBlock))
+    public static void run(List<Block> roots) {
+        System.out.println("Running...");
+        for (Block root: roots) {
+            if (!root.getBlockType().equals(BlockType.START))
                 continue;
-            Block currentBlock = block;
-            while (currentBlock.hasNextBlock()) {
-                currentBlock = currentBlock.getNextBlock();
-                System.out.println(currentBlock);
-            }
+            root.runWithChildren();
         }
     }
 }

@@ -14,12 +14,17 @@ public class BlockView {
     public BlockView() {
         roots = new ArrayList<>();
         StartBlock startBlock = new StartBlock(100.f, 100.f);
-        StopBlock stopBlock = new StopBlock(100.f, 190.f);
         DummyBlock dummyBlock1 = new DummyBlock(100.f, 130.f);
-        DummyBlock dummyBlock2 = new DummyBlock(100.f, 160.f);
+        WhileBlock whileBlock = new WhileBlock(100.f, 160.f);
+        WhileBlockBottom whileBlockBottom = new WhileBlockBottom(100.f, 220.f);
+        DummyBlock dummyBlock2 = new DummyBlock(100.f, 190.f);
+        StopBlock stopBlock = new StopBlock(100.f, 250.f);
         startBlock.setNextBlock(dummyBlock1);
-        dummyBlock1.setNextBlock(dummyBlock2);
-        dummyBlock2.setNextBlock(stopBlock);
+        dummyBlock1.setNextBlock(whileBlock);
+        whileBlock.setInBlock(dummyBlock2);
+        dummyBlock2.setNextBlock(whileBlockBottom);
+        whileBlock.setNextBlock(whileBlockBottom);
+        whileBlockBottom.setNextBlock(stopBlock);
         roots.add(startBlock);
     }
 
@@ -29,12 +34,7 @@ public class BlockView {
 
     public void drawAll() {
         for (Block block: roots) {
-            Block currentBlock = block;
-            currentBlock.draw();
-            while (currentBlock.hasNextBlock()) {
-                currentBlock = currentBlock.getNextBlock();
-                currentBlock.draw();
-            }
+            block.drawWithChildren();
         }
     }
 }

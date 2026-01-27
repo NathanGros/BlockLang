@@ -19,17 +19,31 @@ public abstract class Block {
         this.height = height;
     }
 
-    public Boolean hasNextBlock() {
-        return nextBlock != null;
+    public BlockType getBlockType() {
+        return type;
     }
-
     public void setNextBlock(Block nextBlock) {
         this.nextBlock = nextBlock;
     }
-
     public Block getNextBlock() {
         return nextBlock;
     }
 
+    public Boolean hasNextBlock() {
+        return nextBlock != null;
+    }
+
     public abstract void draw();
+
+    public void drawWithChildren() {
+        this.draw();
+        if (hasNextBlock())
+            nextBlock.drawWithChildren();
+    }
+
+    public void runWithChildren() {
+        System.out.println(type);
+        if (hasNextBlock())
+            nextBlock.runWithChildren();
+    }
 }

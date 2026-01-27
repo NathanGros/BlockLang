@@ -4,4 +4,5 @@ public enum BlockType {
     START,
     STOP,
     DUMMY,
+    WHILE;
 }
