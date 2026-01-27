@@ -1,9 +1,12 @@
-package blocklang.blocks;
+package blocklang.blocks.events;
 
-import static com.raylib.Colors.GREEN;
 import static com.raylib.Raylib.DrawRectangleRounded;
 
+import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
+
+import blocklang.blocks.Block;
+import blocklang.blocks.BlockType;
 
 /**
  * StartBlock
@@ -23,6 +26,11 @@ public class StartBlock extends Block {
         shape.y(posY);
         shape.width(width);
         shape.height(height);
-        DrawRectangleRounded(shape, 0.6f, 5, GREEN);
+        Color color = new Color();
+        color.r((byte) 255);
+        color.g((byte) 191);
+        color.b((byte) 0);
+        color.a((byte) 255);
+        DrawRectangleRounded(shape, 0.6f, 5, color);
 	}
 }

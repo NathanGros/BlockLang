@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import blocklang.blocks.*;
+import blocklang.blocks.control.*;
+import blocklang.blocks.events.*;
 
 /**
  * BlockRunner

@@ -1,6 +1,6 @@
 package blocklang.blocks;
 
-import static com.raylib.Colors.YELLOW;
+import static com.raylib.Colors.BLUE;
 import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Rectangle;
@@ -23,6 +23,6 @@ public class DummyBlock extends Block {
         shape.y(posY);
         shape.width(width);
         shape.height(height);
-        DrawRectangleRounded(shape, 0.6f, 5, YELLOW);
+        DrawRectangleRounded(shape, 0.6f, 5, BLUE);
 	}
 }

@@ -1,10 +1,14 @@
-package blocklang.blocks;
+package blocklang.blocks.control;
 
-import static com.raylib.Colors.BLUE;
-import static com.raylib.Raylib.DrawRectangleRounded;
 import static com.raylib.Raylib.DrawRectangleRec;
+import static com.raylib.Raylib.DrawRectangleRounded;
 
+import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
+
+import blocklang.blocks.Block;
+import blocklang.blocks.BlockType;
+import blocklang.blocks.InvalidBlockException;
 
 /**
  * WhileBlock
@@ -49,13 +53,18 @@ public class WhileBlock extends Block {
         topShape.y(posY);
         topShape.width(width);
         topShape.height(height);
-        DrawRectangleRounded(topShape, 0.6f, 5, BLUE);
         Rectangle sideShape = new Rectangle();
         sideShape.x(posX);
         sideShape.y(posY + height / 2);
         sideShape.width(INDENTATION);
         sideShape.height(nextBlock.getPosY() + nextBlock.getHeight() / 2.f - (posY + height / 2.f));
-        DrawRectangleRec(sideShape, BLUE);
+        Color color = new Color();
+        color.r((byte) 255);
+        color.g((byte) 171);
+        color.b((byte) 25);
+        color.a((byte) 255);
+        DrawRectangleRounded(topShape, 0.6f, 5, color);
+        DrawRectangleRec(sideShape, color);
 	}
 
     @Override
