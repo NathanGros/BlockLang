@@ -8,23 +8,26 @@ import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
+import blocklang.blocks.ConditionBlock;
 import blocklang.blocks.InvalidBlockException;
 
 /**
  * WhileBlock
  */
 public class WhileBlock extends Block {
+    private ConditionBlock condition;
     private Block inBlock;
-    private Boolean condition;
 
     public WhileBlock(Float x, Float y) {
         super(BlockType.WHILE, x, y, 100.f, 30.f);
-        condition = true;
     }
     public WhileBlock() {
         this(0.f, 0.f);
     }
 
+    public void setConditionBlock(ConditionBlock condition) {
+        this.condition = condition;
+    }
     public void setInBlock(Block inBlock) {
         inBlock.setPosX(this.posX + INDENTATION);
         inBlock.setPosY(this.posY + this.height);
@@ -79,7 +82,7 @@ public class WhileBlock extends Block {
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (hasInBlock() && condition)
+        if (hasInBlock() && condition.isTrue())
             inBlock.runWithChildren();
         else
             nextBlock.runWithChildren();
