@@ -2,6 +2,7 @@ package blocklang.blocks;
 
 import static com.raylib.Colors.BLUE;
 import static com.raylib.Raylib.DrawRectangleRounded;
+import static com.raylib.Raylib.DrawRectangleRec;
 
 import com.raylib.Raylib.Rectangle;
 
@@ -43,12 +44,18 @@ public class WhileBlock extends Block {
 
 	@Override
 	public void draw() {
-        Rectangle shape = new Rectangle();
-        shape.x(posX);
-        shape.y(posY);
-        shape.width(width);
-        shape.height(height);
-        DrawRectangleRounded(shape, 0.6f, 5, BLUE);
+        Rectangle topShape = new Rectangle();
+        topShape.x(posX);
+        topShape.y(posY);
+        topShape.width(width);
+        topShape.height(height);
+        DrawRectangleRounded(topShape, 0.6f, 5, BLUE);
+        Rectangle sideShape = new Rectangle();
+        sideShape.x(posX);
+        sideShape.y(posY + height / 2);
+        sideShape.width(INDENTATION);
+        sideShape.height(nextBlock.getPosY() + nextBlock.getHeight() / 2.f - (posY + height / 2.f));
+        DrawRectangleRec(sideShape, BLUE);
 	}
 
     @Override

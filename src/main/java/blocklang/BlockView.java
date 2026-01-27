@@ -22,9 +22,9 @@ public class BlockView {
         try {
             startBlock.setNextBlock(dummyBlock1);
             dummyBlock1.setNextBlock(whileBlock);
-            // whileBlock.setInBlock(dummyBlock2);
+            whileBlock.setInBlock(dummyBlock2);
             whileBlock.setNextBlock(whileBlockBottom);
-            // dummyBlock2.setNextBlock(whileBlockBottom);
+            dummyBlock2.setNextBlock(whileBlockBottom);
             whileBlockBottom.setNextBlock(stopBlock);
             roots.add(startBlock);
         } catch (InvalidBlockException e) {

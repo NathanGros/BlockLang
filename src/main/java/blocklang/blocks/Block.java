@@ -10,7 +10,7 @@ public abstract class Block {
     protected Float width;
     protected Float height;
     protected Block nextBlock;
-    protected static Float INDENTATION = 50.f;
+    protected static Float INDENTATION = 15.f;
 
     public Block(BlockType type, Float posX, Float posY, Float width, Float height) {
         this.type = type;
@@ -26,8 +26,20 @@ public abstract class Block {
     public void setPosX(Float posX) {
         this.posX = posX;
     }
+    public Float getPosX() {
+        return posX;
+    }
     public void setPosY(Float posY) {
         this.posY = posY;
+    }
+    public Float getPosY() {
+        return posY;
+    }
+    public Float getWidth() {
+        return width;
+    }
+    public Float getHeight() {
+        return height;
     }
     public void setNextBlock(Block nextBlock) throws InvalidBlockException {
         if (!nextBlock.getBlockType().equals(BlockType.CLOSING_BLOCK))
