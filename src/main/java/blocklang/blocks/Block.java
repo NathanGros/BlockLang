@@ -1,5 +1,7 @@
 package blocklang.blocks;
 
+import blocklang.blocks.control.WhileBlock;
+
 /**
  * Block
  */
@@ -11,6 +13,8 @@ public abstract class Block {
     protected Float height;
     protected Block nextBlock;
     protected static Float INDENTATION = 15.f;
+    protected Boolean isPlaced;
+    protected Boolean drawToggle;
 
     public Block(BlockType type, Float posX, Float posY, Float width, Float height) {
         this.type = type;
@@ -18,6 +22,8 @@ public abstract class Block {
         this.posY = posY;
         this.width = width;
         this.height = height;
+        this.isPlaced = false;
+        this.drawToggle = false;
     }
 
     public BlockType getBlockType() {
@@ -41,14 +47,29 @@ public abstract class Block {
     public Float getHeight() {
         return height;
     }
-    public void setNextBlock(Block nextBlock) throws InvalidBlockException {
-        if (!nextBlock.getBlockType().equals(BlockType.CLOSING_BLOCK))
-            nextBlock.setPosX(this.posX);
-        nextBlock.setPosY(this.posY + this.height);
+    public void setNextBlock(Block nextBlock) {
         this.nextBlock = nextBlock;
+        if (nextBlock.getBlockType().equals(BlockType.WHILE) && nextBlock.isPlaced()) {
+            WhileBlock whileBlock = (WhileBlock) nextBlock;
+            whileBlock.setCloseY(this.posY + this.height);
+        }
+        if (nextBlock.isPlaced())
+            return;
+        nextBlock.setPosX(this.posX);
+        nextBlock.setPosY(this.posY + this.height);
+        nextBlock.place();
     }
     public Block getNextBlock() {
         return nextBlock;
+    }
+    public Boolean isPlaced() {
+        return isPlaced;
+    }
+    public void place() {
+        this.isPlaced = true;
+    }
+    public Boolean getDrawToggle() {
+        return drawToggle;
     }
 
     public Boolean hasNextBlock() {
@@ -57,10 +78,13 @@ public abstract class Block {
 
     public abstract void draw();
 
-    public void drawWithChildren() {
+    public void drawWithChildren(Boolean drawToggle) {
+        if (this.drawToggle != drawToggle)
+            return;
         this.draw();
+        this.drawToggle = !this.drawToggle;
         if (hasNextBlock())
-            nextBlock.drawWithChildren();
+            nextBlock.drawWithChildren(drawToggle);
     }
 
     public void runWithChildren() {
