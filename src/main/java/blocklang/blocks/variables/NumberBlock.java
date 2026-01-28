@@ -1,19 +1,28 @@
-package blocklang.blocks;
+package blocklang.blocks.variables;
 
 import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
+import blocklang.blocks.ValueBlock;
+
 /**
- * DummyBlock
+ * NumberBlock
  */
-public class DummyBlock extends Block {
-    public DummyBlock(Float x, Float y) {
-        super(BlockType.DUMMY, x, y, 200.f, 30.f);
+public class NumberBlock extends ValueBlock {
+    private Float value;
+
+	public NumberBlock(Float posX, Float posY, Float width, Float height) {
+		super(posX, posY, width, height);
+        value = 0.f;
+	}
+
+    public Float getValue() {
+        return value;
     }
-    public DummyBlock() {
-        this(0.f, 0.f);
+    public void setValue(Float value) {
+        this.value = value;
     }
 
 	@Override
@@ -28,6 +37,6 @@ public class DummyBlock extends Block {
         color.g((byte) 151);
         color.b((byte) 255);
         color.a((byte) 255);
-        DrawRectangleRounded(shape, 0.6f, 5, color);
+        DrawRectangleRounded(shape, 1.f, 5, color);
 	}
 }
