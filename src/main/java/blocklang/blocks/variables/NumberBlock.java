@@ -14,7 +14,7 @@ public class NumberBlock extends ValueBlock {
     private Float value;
 
     public NumberBlock(Float x, Float y) {
-        super(x, y, 200.f, 30.f);
+        super(x, y, 50.f, 30.f);
         value = 0.f;
     }
     public NumberBlock() {

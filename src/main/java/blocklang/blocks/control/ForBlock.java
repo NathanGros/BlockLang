@@ -19,9 +19,10 @@ public class ForBlock extends Block {
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
+    static Float BASE_WIDTH = 100.f;
 
     public ForBlock(Float x, Float y) {
-        super(BlockType.FOR, x, y, 100.f, 30.f);
+        super(BlockType.FOR, x, y, 100.f, 40.f);
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
         nbRepetitions = new NumberBlock();
@@ -38,6 +39,7 @@ public class ForBlock extends Block {
         NumberBlock n = new NumberBlock();
         n.setValue(nbRepetitions.floatValue());
         this.nbRepetitions = n;
+        positionNbRepetitionsBlock();
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
@@ -55,6 +57,12 @@ public class ForBlock extends Block {
         return inBlock;
     }
 
+    private void positionNbRepetitionsBlock() {
+        Float margin = (this.height - nbRepetitions.getHeight()) / 2.f;
+        nbRepetitions.setPosX(this.posX + BASE_WIDTH + margin);
+        nbRepetitions.setPosY(this.posY + margin);
+        this.width = BASE_WIDTH + 2.f * margin + nbRepetitions.getWidth();
+    }
     public Boolean hasInBlock() {
         return inBlock != null;
     }
@@ -62,6 +70,7 @@ public class ForBlock extends Block {
     public void place() {
         this.isPlaced = true;
         closeY = posY + height;
+        positionNbRepetitionsBlock();
     }
 
 	@Override
@@ -79,7 +88,7 @@ public class ForBlock extends Block {
         Rectangle bottomShape = new Rectangle();
         bottomShape.x(posX);
         bottomShape.y(closeY);
-        bottomShape.width(width);
+        bottomShape.width(BASE_WIDTH);
         bottomShape.height(closeHeight);
         Color color = new Color();
         color.r((byte) 255);
@@ -89,6 +98,7 @@ public class ForBlock extends Block {
         DrawRectangleRounded(topShape, 0.6f, 5, color);
         DrawRectangleRec(sideShape, color);
         DrawRectangleRounded(bottomShape, 0.9f, 5, color);
+        nbRepetitions.draw();
 	}
 
     @Override
