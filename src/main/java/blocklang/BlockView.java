@@ -22,7 +22,6 @@ public class BlockView {
         WhileBlock whileBlock1 = new WhileBlock();
         EqualsBlock equalsBlock1 = new EqualsBlock();
         WhileBlock whileBlock2 = new WhileBlock();
-        EqualsBlock equalsBlock2 = new EqualsBlock();
         DummyBlock dummyBlock2 = new DummyBlock();
         DummyBlock dummyBlock3 = new DummyBlock();
         StopBlock stopBlock = new StopBlock();
@@ -36,9 +35,6 @@ public class BlockView {
         whileBlock1.setConditionBlock(equalsBlock1);
         whileBlock1.setNextBlock(forBlock);
         forBlock.setNextBlock(whileBlock2);
-        equalsBlock2.setValue1(5);
-        equalsBlock2.setValue2(6);
-        whileBlock2.setConditionBlock(equalsBlock2);
         whileBlock2.setInBlock(dummyBlock3);
         dummyBlock3.setNextBlock(whileBlock2);
         whileBlock2.setNextBlock(stopBlock);

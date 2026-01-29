@@ -9,7 +9,6 @@ import com.raylib.Raylib.Rectangle;
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.BooleanBlock;
-import blocklang.blocks.operators.EqualsBlock;
 
 /**
  * WhileBlock
@@ -25,7 +24,7 @@ public class WhileBlock extends Block {
         super(BlockType.WHILE, x, y, 100.f, 50.f);
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
-        condition = new EqualsBlock();
+        condition = new BooleanBlock();
         positionBooleanBlock();
     }
     public WhileBlock() {
