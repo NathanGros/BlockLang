@@ -8,31 +8,33 @@ import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
-import blocklang.blocks.ConditionBlock;
 
 /**
- * WhileBlock
+ * ForBlock
  */
-public class WhileBlock extends Block {
-    private ConditionBlock condition;
+public class ForBlock extends Block {
+    private Integer nbRepetitions;
+    private Integer iterator;
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
 
-    public WhileBlock(Float x, Float y) {
-        super(BlockType.WHILE, x, y, 100.f, 30.f);
+    public ForBlock(Float x, Float y) {
+        super(BlockType.FOR, x, y, 100.f, 30.f);
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
+        nbRepetitions = 0;
+        iterator = 0;
     }
-    public WhileBlock() {
+    public ForBlock() {
         this(0.f, 0.f);
     }
 
     public void setCloseY(Float closeY) {
         this.closeY = closeY;
     }
-    public void setConditionBlock(ConditionBlock condition) {
-        this.condition = condition;
+    public void setNbRepetitions(Integer nbRepetitions) {
+        this.nbRepetitions = nbRepetitions;
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
@@ -115,9 +117,12 @@ public class WhileBlock extends Block {
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (hasInBlock() && condition.isTrue())
+        if (hasInBlock() && iterator < nbRepetitions) {
+            iterator++;
             inBlock.runWithChildren();
-        else
+        } else {
+            iterator = 0;
             nextBlock.runWithChildren();
+        }
     }
 }

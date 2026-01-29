@@ -1,5 +1,6 @@
 package blocklang.blocks;
 
+import blocklang.blocks.control.ForBlock;
 import blocklang.blocks.control.WhileBlock;
 
 /**
@@ -52,6 +53,12 @@ public abstract class Block {
         if (nextBlock.getBlockType().equals(BlockType.WHILE) && nextBlock.isPlaced()) {
             WhileBlock whileBlock = (WhileBlock) nextBlock;
             whileBlock.setCloseY(this.posY + this.height);
+            return;
+        }
+        if (nextBlock.getBlockType().equals(BlockType.FOR) && nextBlock.isPlaced()) {
+            ForBlock forBlock = (ForBlock) nextBlock;
+            forBlock.setCloseY(this.posY + this.height);
+            return;
         }
         if (nextBlock.isPlaced())
             return;
