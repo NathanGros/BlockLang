@@ -22,7 +22,7 @@ public class WhileBlock extends Block {
     static Float BASE_WIDTH = 100.f;
 
     public WhileBlock(Float x, Float y) {
-        super(BlockType.WHILE, x, y, 100.f, 40.f);
+        super(BlockType.WHILE, x, y, 100.f, 50.f);
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
         condition = new EqualsBlock();
