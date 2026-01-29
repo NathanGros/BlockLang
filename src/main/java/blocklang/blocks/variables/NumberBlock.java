@@ -13,10 +13,13 @@ import blocklang.blocks.ValueBlock;
 public class NumberBlock extends ValueBlock {
     private Float value;
 
-	public NumberBlock(Float posX, Float posY, Float width, Float height) {
-		super(posX, posY, width, height);
+    public NumberBlock(Float x, Float y) {
+        super(x, y, 200.f, 30.f);
         value = 0.f;
-	}
+    }
+    public NumberBlock() {
+        this(0.f, 0.f);
+    }
 
     public Float getValue() {
         return value;
@@ -33,10 +36,23 @@ public class NumberBlock extends ValueBlock {
         shape.width(width);
         shape.height(height);
         Color color = new Color();
-        color.r((byte) 76);
-        color.g((byte) 151);
+        color.r((byte) 255);
+        color.g((byte) 255);
         color.b((byte) 255);
         color.a((byte) 255);
         DrawRectangleRounded(shape, 1.f, 5, color);
+	}
+
+	@Override
+	public Boolean equals(ValueBlock otherValue) {
+        if (this == otherValue)
+            return true;
+        if (otherValue == null)
+            return false;
+        if (otherValue instanceof NumberBlock number) {
+            return this.value.equals(number.getValue());
+        }
+        // TODO other valueblocks
+        return false;
 	}
 }

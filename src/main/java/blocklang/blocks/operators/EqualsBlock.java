@@ -6,13 +6,15 @@ import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.ConditionBlock;
+import blocklang.blocks.ValueBlock;
+import blocklang.blocks.variables.NumberBlock;
 
 /**
  * CompareBlock
  */
 public class EqualsBlock extends ConditionBlock {
-    private Integer value1;
-    private Integer value2;
+    private ValueBlock value1;
+    private ValueBlock value2;
 
     public EqualsBlock(Float posX, Float posY) {
         super(posX, posY, 100.f, 24.f);
@@ -22,15 +24,19 @@ public class EqualsBlock extends ConditionBlock {
     }
 
     public void setValue1(Integer value) {
-        this.value1 = value;
+        NumberBlock number = new NumberBlock();
+        number.setValue(value.floatValue());
+        this.value1 = number;
     }
     public void setValue2(Integer value) {
-        this.value2 = value;
+        NumberBlock number = new NumberBlock();
+        number.setValue(value.floatValue());
+        this.value2 = number;
     }
 
 	@Override
 	public Boolean isTrue() {
-        return value1 == value2;
+        return value1.equals(value2);
 	}
 
 	@Override

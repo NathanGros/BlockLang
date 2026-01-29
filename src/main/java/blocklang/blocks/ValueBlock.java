@@ -17,4 +17,6 @@ public abstract class ValueBlock {
     }
 
     public abstract void draw();
+
+    public abstract Boolean equals(ValueBlock value);
 }
