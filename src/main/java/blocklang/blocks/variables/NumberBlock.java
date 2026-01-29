@@ -5,6 +5,7 @@ import static com.raylib.Raylib.DrawRectangleRounded;
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
+import blocklang.blocks.Position;
 import blocklang.blocks.ValueBlock;
 
 /**
@@ -31,8 +32,8 @@ public class NumberBlock extends ValueBlock {
 	@Override
 	public void draw() {
         Rectangle shape = new Rectangle();
-        shape.x(posX);
-        shape.y(posY);
+        shape.x(getPosX());
+        shape.y(getPosY());
         shape.width(width);
         shape.height(height);
         Color color = new Color();

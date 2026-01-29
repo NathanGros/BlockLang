@@ -11,7 +11,8 @@ public class Main {
         int screenHeight = 450;
 
         BlockView blockView = new BlockView();
-        BlockRunner.run(blockView.getRoots());
+        blockView.positionAll();
+        blockView.runAll();
 
         SetConfigFlags(FLAG_MSAA_4X_HINT);
         InitWindow(screenWidth, screenHeight, "BlockLang");

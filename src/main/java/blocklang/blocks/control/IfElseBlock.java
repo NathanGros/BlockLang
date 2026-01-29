@@ -8,6 +8,7 @@ import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
+import blocklang.blocks.Position;
 import blocklang.blocks.BooleanBlock;
 
 /**
@@ -15,7 +16,6 @@ import blocklang.blocks.BooleanBlock;
  */
 public class IfElseBlock extends Block {
     private BooleanBlock condition;
-    private Boolean ran;
     private Block inTrueBlock;
     private Block inFalseBlock;
     private Float middleHeight;
@@ -24,16 +24,13 @@ public class IfElseBlock extends Block {
     private Float closeY;
     private static Float MARGIN_LEFT = 40.f;
     private static Float MARGIN_RIGHT = 60.f;
+    private static Float HOLE_HEIGHT = 25.f;
 
     public IfElseBlock(Float x, Float y) {
         super(BlockType.IF_ELSE, x, y, 100.f, 50.f);
-        ran = false;
         middleHeight = BASE_HEIGHT * 2.f / 3.f;
-        middleY = posY + height;
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
-        closeY = posY + height + middleHeight;
         condition = new BooleanBlock();
-        positionBooleanBlock();
     }
     public IfElseBlock() {
         this(0.f, 0.f);
@@ -44,27 +41,12 @@ public class IfElseBlock extends Block {
     }
     public void setConditionBlock(BooleanBlock condition) {
         this.condition = condition;
-        positionBooleanBlock();
     }
     public void setInTrueBlock(Block inTrueBlock) {
         this.inTrueBlock = inTrueBlock;
-        if (inTrueBlock.isPlaced())
-            return;
-        inTrueBlock.setPosX(this.posX + INDENTATION);
-        inTrueBlock.setPosY(this.posY + this.height);
-        inTrueBlock.place();
     }
     public void setInFalseBlock(Block inFalseBlock) {
         this.inFalseBlock = inFalseBlock;
-        if (inFalseBlock.isPlaced())
-            return;
-        inFalseBlock.setPosX(this.posX + INDENTATION);
-        inFalseBlock.setPosY(this.middleY + this.middleHeight);
-        inFalseBlock.place();
-    }
-    @Override
-    public void setNextBlock(Block nextBlock) {
-        setNextBlockAtHeight(nextBlock, this.closeY + this.closeHeight);
     }
     public Block getInTrueBlock() {
         return inTrueBlock;
@@ -73,12 +55,11 @@ public class IfElseBlock extends Block {
         return inFalseBlock;
     }
 
-    private void positionBooleanBlock() {
+    private void positionCondition() {
         Float margin = 3.f;
+        condition.positionWithChildren(new Position(getPosX() + MARGIN_LEFT + margin, getPosY() + margin));
         this.height = 2.f * margin + condition.getHeight();
         this.width = MARGIN_LEFT + 2.f * margin + condition.getWidth() + MARGIN_RIGHT;
-        condition.setPosX(this.posX + MARGIN_LEFT + margin);
-        condition.setPosY(this.posY + margin);
     }
     public Boolean hasInTrueBlock() {
         return inTrueBlock != null;
@@ -86,27 +67,26 @@ public class IfElseBlock extends Block {
     public Boolean hasInFalseBlock() {
         return inFalseBlock != null;
     }
-    @Override
-    public void place() {
-        this.isPlaced = true;
-        closeY = posY + height;
-        positionBooleanBlock();
-    }
 
 	@Override
 	public void draw() {
         Rectangle topShape = new Rectangle();
-        topShape.x(posX);
-        topShape.y(posY);
+        topShape.x(getPosX());
+        topShape.y(getPosY());
         topShape.width(width);
         topShape.height(height);
         Rectangle sideShape = new Rectangle();
-        sideShape.x(posX);
-        sideShape.y(posY + height / 2.f);
+        sideShape.x(getPosX());
+        sideShape.y(getPosY() + height / 2.f);
         sideShape.width(INDENTATION);
-        sideShape.height(closeY + closeHeight / 2.f - (posY + height / 2.f));
+        sideShape.height(closeY + closeHeight / 2.f - (getPosY() + height / 2.f));
+        Rectangle middleShape = new Rectangle();
+        middleShape.x(getPosX());
+        middleShape.y(middleY);
+        middleShape.width(width);
+        middleShape.height(middleHeight);
         Rectangle bottomShape = new Rectangle();
-        bottomShape.x(posX);
+        bottomShape.x(getPosX());
         bottomShape.y(closeY);
         bottomShape.width(width);
         bottomShape.height(closeHeight);
@@ -117,42 +97,55 @@ public class IfElseBlock extends Block {
         color.a((byte) 255);
         DrawRectangleRounded(topShape, CORNER_RADIUS / (height / 2.f), 5, color);
         DrawRectangleRec(sideShape, color);
+        DrawRectangleRounded(middleShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
         DrawRectangleRounded(bottomShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
         condition.draw();
 	}
 
     @Override
-    public void drawWithChildren(Boolean drawToggle) {
-        if (this.drawToggle != drawToggle)
-            return;
-        this.draw();
-        this.drawToggle = !this.drawToggle;
+    public Position positionWithChildren(Position pos) {
+        setPos(pos);
+        positionCondition();
+        Position inTruePos = new Position(this.getPosX() + INDENTATION, this.getPosY() + this.height);
+        Position inFalsePos = new Position(inTruePos.getPosX(), inTruePos.getPosY() + HOLE_HEIGHT);
         if (hasInTrueBlock())
-            inTrueBlock.drawWithChildren(drawToggle);
-        if (hasInFalseBlock())
-            inFalseBlock.drawWithChildren(drawToggle);
-        nextBlock.drawWithChildren(drawToggle);
+            inFalsePos.setPos(inTrueBlock.positionWithChildren(inTruePos));
+        middleY = inFalsePos.getPosY();
+        inFalsePos.setPos(this.getPosX() + INDENTATION, middleY + middleHeight);
+        Position nextPos = new Position(inFalsePos.getPosX(), inFalsePos.getPosY() + HOLE_HEIGHT);
+        if (hasInFalseBlock()) {
+            nextPos.setPos(inFalseBlock.positionWithChildren(inFalsePos));
+        }
+        closeY = nextPos.getPosY();
+        nextPos.setPos(this.getPosX(), closeY + closeHeight);
+        Position endPos = new Position(nextPos);
+        if (hasNextBlock())
+            endPos.setPos(nextBlock.positionWithChildren(nextPos));
+        return endPos;
     }
 
     @Override
     public void runWithChildren() {
-        if (!hasInTrueBlock()) {
-            nextBlock.runWithChildren();
-            return;
-        }
         System.out.println(type);
-        if (ran) {
-            ran = false;
-            nextBlock.runWithChildren();
-            return;
-        }
-        ran = true;
-        if (hasInTrueBlock() && condition.isTrue()) {
-            inTrueBlock.runWithChildren();
-        } else if (hasInFalseBlock() && !condition.isTrue()) {
-            inFalseBlock.runWithChildren();
+        if (condition.isTrue()) {
+            if (hasInTrueBlock())
+                inTrueBlock.runWithChildren();
         } else {
-            nextBlock.runWithChildren();
+            if (hasInFalseBlock())
+                inFalseBlock.runWithChildren();
         }
+        if (hasNextBlock())
+            nextBlock.runWithChildren();
+    }
+
+    @Override
+    public void drawWithChildren() {
+        this.draw();
+        if (hasInTrueBlock())
+            inTrueBlock.drawWithChildren();
+        if (hasInFalseBlock())
+            inFalseBlock.drawWithChildren();
+        if (hasNextBlock())
+            nextBlock.drawWithChildren();
     }
 }

@@ -8,6 +8,7 @@ import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
 import blocklang.blocks.BooleanBlock;
+import blocklang.blocks.Position;
 import blocklang.blocks.ValueBlock;
 import blocklang.blocks.variables.NumberBlock;
 
@@ -23,7 +24,6 @@ public class EqualsBlock extends BooleanBlock {
         super(posX, posY, 100.f, 40.f);
         value1 = new NumberBlock();
         value2 = new NumberBlock();
-        positionValueBlocks();
     }
     public EqualsBlock() {
         this(0.f, 0.f);
@@ -32,7 +32,6 @@ public class EqualsBlock extends BooleanBlock {
     @Override
     public void setPosX(Float posX) {
         super.setPosX(posX);
-        positionValueBlocks();
     }
     @Override
     public void setPosY(Float posY) {
@@ -43,13 +42,11 @@ public class EqualsBlock extends BooleanBlock {
         NumberBlock number = new NumberBlock();
         number.setValue(value.floatValue());
         this.value1 = number;
-        positionValueBlocks();
     }
     public void setValue2(Integer value) {
         NumberBlock number = new NumberBlock();
         number.setValue(value.floatValue());
         this.value2 = number;
-        positionValueBlocks();
     }
 
     private void positionValueBlocks() {
@@ -57,11 +54,16 @@ public class EqualsBlock extends BooleanBlock {
         Float valuesHeight = Math.max(value1.getHeight(), value2.getHeight());
         this.height = 2.f * margin + valuesHeight;
         this.width = CENTER_WIDTH + 4.f * margin + height + value1.getWidth() + value2.getWidth();
-        value1.setPosX(this.posX + height / 2.f + margin);
-        value1.setPosY(this.posY + margin + (valuesHeight - value1.getHeight()) / 2.f);
-        value2.setPosX(value1.getPosX() + value1.getWidth() + CENTER_WIDTH + 2.f * margin);
-        value2.setPosY(this.posY + margin + (valuesHeight - value2.getHeight()) / 2.f);
+        value1.setPos(new Position(
+            getPosX() + height / 2.f + margin,
+            getPosY() + margin + (valuesHeight - value1.getHeight()) / 2.f
+        ));
+        value2.setPos(new Position(
+            value1.getPosX() + value1.getWidth() + CENTER_WIDTH + 2.f * margin,
+            getPosY() + margin + (valuesHeight - value2.getHeight()) / 2.f
+        ));
     }
+
 	@Override
 	public Boolean isTrue() {
         return value1.equals(value2);
@@ -71,16 +73,16 @@ public class EqualsBlock extends BooleanBlock {
 	public void draw() {
         Rectangle center = new Rectangle();
         Float halfHeight = height / 2.f;
-        center.x(posX + halfHeight);
-        center.y(posY);
+        center.x(getPosX() + halfHeight);
+        center.y(getPosY());
         center.width(width - height);
         center.height(height);
         Vector2 leftCenter = new Vector2();
-        leftCenter.x(posX + halfHeight);
-        leftCenter.y(posY + halfHeight);
+        leftCenter.x(getPosX() + halfHeight);
+        leftCenter.y(getPosY() + halfHeight);
         Vector2 rightCenter = new Vector2();
-        rightCenter.x(posX + width - halfHeight);
-        rightCenter.y(posY + halfHeight);
+        rightCenter.x(getPosX() + width - halfHeight);
+        rightCenter.y(getPosY() + halfHeight);
         Float radius = halfHeight;
         Color color = new Color();
         color.r((byte) 89);
@@ -90,7 +92,18 @@ public class EqualsBlock extends BooleanBlock {
         DrawRectangleRec(center, color);
         DrawPoly(leftCenter, 4, radius, 0.f, color);
         DrawPoly(rightCenter, 4, radius, 0.f, color);
+	}
+
+    @Override
+    public void positionWithChildren(Position pos) {
+        setPos(pos);
+        positionValueBlocks();
+    }
+
+    @Override
+    public void drawWithChildren() {
+        draw();
         value1.draw();
         value2.draw();
-	}
+    }
 }

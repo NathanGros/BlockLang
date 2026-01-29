@@ -25,7 +25,10 @@ public class BlockView {
         EqualsBlock equalsBlock1 = new EqualsBlock();
         WhileBlock whileBlock1 = new WhileBlock();
         DummyBlock dummyBlock4 = new DummyBlock();
+        IfElseBlock ifElseBlock = new IfElseBlock();
+        DummyBlock dummyBlock5 = new DummyBlock();
         StopBlock stopBlock = new StopBlock();
+
         startBlock.setNextBlock(dummyBlock1);
         dummyBlock1.setNextBlock(forBlock);
         forBlock.setNbRepetitions(3);
@@ -35,12 +38,11 @@ public class BlockView {
         equalsBlock1.setValue2(1);
         ifBlock1.setConditionBlock(equalsBlock1);
         ifBlock1.setInBlock(dummyBlock3);
-        dummyBlock3.setNextBlock(ifBlock1);
-        ifBlock1.setNextBlock(forBlock);
         forBlock.setNextBlock(whileBlock1);
         whileBlock1.setInBlock(dummyBlock4);
-        dummyBlock4.setNextBlock(whileBlock1);
-        whileBlock1.setNextBlock(stopBlock);
+        whileBlock1.setNextBlock(ifElseBlock);
+        ifElseBlock.setInTrueBlock(dummyBlock5);
+        ifElseBlock.setNextBlock(stopBlock);
         roots.add(startBlock);
     }
 
@@ -48,9 +50,26 @@ public class BlockView {
         return roots;
     }
 
+    public void positionAll() {
+        for (Block root: roots) {
+            if (!root.getBlockType().equals(BlockType.START))
+                continue;
+            root.positionWithChildren(root.getPos());
+        }
+    }
+
+    public void runAll() {
+        System.out.println("Running...");
+        for (Block root: roots) {
+            if (!root.getBlockType().equals(BlockType.START))
+                continue;
+            root.runWithChildren();
+        }
+    }
+
     public void drawAll() {
         for (Block block: roots) {
-            block.drawWithChildren(block.getDrawToggle());
+            block.drawWithChildren();
         }
     }
 }

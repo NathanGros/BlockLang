@@ -9,6 +9,7 @@ import com.raylib.Raylib.Rectangle;
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.BooleanBlock;
+import blocklang.blocks.Position;
 
 /**
  * WhileBlock
@@ -20,72 +21,54 @@ public class WhileBlock extends Block {
     private Float closeY;
     private static Float MARGIN_LEFT = 100.f;
     private static Float MARGIN_RIGHT = 10.f;
+    private static Float HOLE_HEIGHT = 25.f;
 
     public WhileBlock(Float x, Float y) {
         super(BlockType.WHILE, x, y, 100.f, 50.f);
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
-        closeY = posY + height;
         condition = new BooleanBlock();
-        positionBooleanBlock();
     }
     public WhileBlock() {
         this(0.f, 0.f);
     }
 
-    public void setCloseY(Float closeY) {
-        this.closeY = closeY;
-    }
     public void setConditionBlock(BooleanBlock condition) {
         this.condition = condition;
-        positionBooleanBlock();
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
-        if (inBlock.isPlaced())
-            return;
-        inBlock.setPosX(this.posX + INDENTATION);
-        inBlock.setPosY(this.posY + this.height);
-        inBlock.place();
-    }
-    @Override
-    public void setNextBlock(Block nextBlock) {
-        setNextBlockAtHeight(nextBlock, this.closeY + this.closeHeight);
     }
     public Block getInBlock() {
         return inBlock;
     }
 
-    private void positionBooleanBlock() {
+    private void positionCondition() {
         Float margin = 3.f;
+        condition.positionWithChildren(new Position(this.getPosX() + MARGIN_LEFT + margin, this.getPosY() + margin));
         this.height = 2.f * margin + condition.getHeight();
         this.width = MARGIN_LEFT + 2.f * margin + condition.getWidth() + MARGIN_RIGHT;
-        condition.setPosX(this.posX + MARGIN_LEFT + margin);
-        condition.setPosY(this.posY + margin);
     }
     public Boolean hasInBlock() {
         return inBlock != null;
     }
-    @Override
-    public void place() {
-        this.isPlaced = true;
-        closeY = posY + height;
-        positionBooleanBlock();
+    public Boolean hasCondition() {
+        return condition != null;
     }
 
 	@Override
 	public void draw() {
         Rectangle topShape = new Rectangle();
-        topShape.x(posX);
-        topShape.y(posY);
+        topShape.x(getPosX());
+        topShape.y(getPosY());
         topShape.width(width);
         topShape.height(height);
         Rectangle sideShape = new Rectangle();
-        sideShape.x(posX);
-        sideShape.y(posY + height / 2.f);
+        sideShape.x(getPosX());
+        sideShape.y(getPosY() + height / 2.f);
         sideShape.width(INDENTATION);
-        sideShape.height(closeY + closeHeight / 2.f - (posY + height / 2.f));
+        sideShape.height(closeY + closeHeight / 2.f - (getPosY() + height / 2.f));
         Rectangle bottomShape = new Rectangle();
-        bottomShape.x(posX);
+        bottomShape.x(getPosX());
         bottomShape.y(closeY);
         bottomShape.width(width);
         bottomShape.height(closeHeight);
@@ -97,26 +80,44 @@ public class WhileBlock extends Block {
         DrawRectangleRounded(topShape, CORNER_RADIUS / (height / 2.f), 5, color);
         DrawRectangleRec(sideShape, color);
         DrawRectangleRounded(bottomShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
-        condition.draw();
 	}
 
     @Override
-    public void drawWithChildren(Boolean drawToggle) {
-        if (this.drawToggle != drawToggle)
-            return;
-        this.draw();
-        this.drawToggle = !this.drawToggle;
-        if (hasInBlock())
-            inBlock.drawWithChildren(drawToggle);
-        nextBlock.drawWithChildren(drawToggle);
+    public Position positionWithChildren(Position pos) {
+        setPos(pos);
+        if (hasCondition())
+            positionCondition();
+        Position inPos = new Position(this.getPosX() + INDENTATION, this.getPosY() + this.height);
+        Position nextPos = new Position(inPos.getPosX(), inPos.getPosY() + HOLE_HEIGHT);
+        if (hasInBlock()) {
+            nextPos.setPos(inBlock.positionWithChildren(inPos));
+        }
+        closeY = nextPos.getPosY();
+        nextPos.setPos(this.getPosX(), closeY + closeHeight);
+        Position endPos = new Position(nextPos);
+        if (hasNextBlock())
+            endPos.setPos(nextBlock.positionWithChildren(nextPos));
+        return endPos;
     }
 
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (hasInBlock() && condition.isTrue())
-            inBlock.runWithChildren();
-        else
+        if (hasInBlock()) {
+            while (condition.isTrue())
+                inBlock.runWithChildren();
+        }
+        if (hasNextBlock())
             nextBlock.runWithChildren();
+    }
+
+    @Override
+    public void drawWithChildren() {
+        this.draw();
+        condition.drawWithChildren();
+        if (hasInBlock())
+            inBlock.drawWithChildren();
+        if (hasNextBlock())
+            nextBlock.drawWithChildren();
     }
 }

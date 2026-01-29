@@ -11,14 +11,12 @@ import com.raylib.Raylib.Vector2;
  * BooleanBlock
  */
 public class BooleanBlock {
-    protected Float posX;
-    protected Float posY;
+    protected Position pos;
     protected Float width;
     protected Float height;
 
     public BooleanBlock(Float posX, Float posY, Float width, Float height) {
-        this.posX = posX;
-        this.posY = posY;
+        this.pos = new Position(posX, posY);
         this.width = width;
         this.height = height;
     }
@@ -30,16 +28,25 @@ public class BooleanBlock {
     }
 
     public void setPosX(Float posX) {
-        this.posX = posX;
+        this.pos.setPosX(posX);
     }
     public Float getPosX() {
-        return posX;
+        return pos.getPosX();
     }
     public void setPosY(Float posY) {
-        this.posY = posY;
+        this.pos.setPosY(posY);
     }
     public Float getPosY() {
-        return posY;
+        return pos.getPosY();
+    }
+    public void setPos(Float posX, Float posY) {
+        pos = new Position(posX, posY);
+    }
+    public void setPos(Position pos) {
+        this.pos = new Position(pos.getPosX(), pos.getPosY());
+    }
+    public Position getPos() {
+        return new Position(pos.getPosX(), pos.getPosY());
     }
     public Float getWidth() {
         return width;
@@ -55,30 +62,30 @@ public class BooleanBlock {
     public void draw() {
         Float halfHeight = height / 2.f;
         Rectangle center = new Rectangle();
-        center.x(posX + halfHeight);
-        center.y(posY);
+        center.x(getPosX() + halfHeight);
+        center.y(getPosY());
         center.width(width - height);
         center.height(height);
 
         Vector2 leftTopVertex = new Vector2();
-        leftTopVertex.x(posX + halfHeight);
-        leftTopVertex.y(posY);
+        leftTopVertex.x(getPosX() + halfHeight);
+        leftTopVertex.y(getPosY());
         Vector2 leftCenterVertex = new Vector2();
-        leftCenterVertex.x(posX);
-        leftCenterVertex.y(posY + halfHeight);
+        leftCenterVertex.x(getPosX());
+        leftCenterVertex.y(getPosY() + halfHeight);
         Vector2 leftBottomVertex = new Vector2();
-        leftBottomVertex.x(posX + halfHeight);
-        leftBottomVertex.y(posY + height);
+        leftBottomVertex.x(getPosX() + halfHeight);
+        leftBottomVertex.y(getPosY() + height);
 
         Vector2 rightTopVertex = new Vector2();
-        rightTopVertex.x(posX + width - halfHeight);
-        rightTopVertex.y(posY);
+        rightTopVertex.x(getPosX() + width - halfHeight);
+        rightTopVertex.y(getPosY());
         Vector2 rightCenterVertex = new Vector2();
-        rightCenterVertex.x(posX + width);
-        rightCenterVertex.y(posY + halfHeight);
+        rightCenterVertex.x(getPosX() + width);
+        rightCenterVertex.y(getPosY() + halfHeight);
         Vector2 rightBottomVertex = new Vector2();
-        rightBottomVertex.x(posX + width - halfHeight);
-        rightBottomVertex.y(posY + height);
+        rightBottomVertex.x(getPosX() + width - halfHeight);
+        rightBottomVertex.y(getPosY() + height);
 
         Color color = new Color();
         color.r((byte) 0);
@@ -88,5 +95,13 @@ public class BooleanBlock {
         DrawRectangleRec(center, color);
         DrawTriangle(leftTopVertex, leftCenterVertex, leftBottomVertex, color);
         DrawTriangle(rightBottomVertex, rightCenterVertex, rightTopVertex, color);
+    }
+
+    public void positionWithChildren(Position pos) {
+        setPos(pos);
+    }
+
+    public void drawWithChildren() {
+        this.draw();
     }
 }

@@ -8,6 +8,7 @@ import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
+import blocklang.blocks.Position;
 import blocklang.blocks.variables.NumberBlock;
 
 /**
@@ -15,45 +16,29 @@ import blocklang.blocks.variables.NumberBlock;
  */
 public class ForBlock extends Block {
     private NumberBlock nbRepetitions;
-    private Integer iterator;
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
     private static Float MARGIN_LEFT = 100.f;
     private static Float MARGIN_RIGHT = 10.f;
+    private static Float HOLE_HEIGHT = 25.f;
 
     public ForBlock(Float x, Float y) {
         super(BlockType.FOR, x, y, 100.f, 40.f);
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
-        closeY = posY + height;
         nbRepetitions = new NumberBlock();
-        positionNbRepetitionsBlock();
-        iterator = 0;
     }
     public ForBlock() {
         this(0.f, 0.f);
     }
 
-    public void setCloseY(Float closeY) {
-        this.closeY = closeY;
-    }
     public void setNbRepetitions(Integer nbRepetitions) {
         NumberBlock n = new NumberBlock();
         n.setValue(nbRepetitions.floatValue());
         this.nbRepetitions = n;
-        positionNbRepetitionsBlock();
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
-        if (inBlock.isPlaced())
-            return;
-        inBlock.setPosX(this.posX + INDENTATION);
-        inBlock.setPosY(this.posY + this.height);
-        inBlock.place();
-    }
-    @Override
-    public void setNextBlock(Block nextBlock) {
-        setNextBlockAtHeight(nextBlock, this.closeY + this.closeHeight);
     }
     public Block getInBlock() {
         return inBlock;
@@ -61,35 +46,28 @@ public class ForBlock extends Block {
 
     private void positionNbRepetitionsBlock() {
         Float margin = 3.f;
+        nbRepetitions.positionWithChildren(new Position(getPosX() + MARGIN_LEFT + margin, getPosY() + margin));
         this.height = 2.f * margin + nbRepetitions.getHeight();
         this.width = MARGIN_LEFT + 2.f * margin + nbRepetitions.getWidth() + MARGIN_RIGHT;
-        nbRepetitions.setPosX(this.posX + MARGIN_LEFT + margin);
-        nbRepetitions.setPosY(this.posY + margin);
     }
     public Boolean hasInBlock() {
         return inBlock != null;
-    }
-    @Override
-    public void place() {
-        this.isPlaced = true;
-        closeY = posY + height;
-        positionNbRepetitionsBlock();
     }
 
 	@Override
 	public void draw() {
         Rectangle topShape = new Rectangle();
-        topShape.x(posX);
-        topShape.y(posY);
+        topShape.x(getPosX());
+        topShape.y(getPosY());
         topShape.width(width);
         topShape.height(height);
         Rectangle sideShape = new Rectangle();
-        sideShape.x(posX);
-        sideShape.y(posY + height / 2.f);
+        sideShape.x(getPosX());
+        sideShape.y(getPosY() + height / 2.f);
         sideShape.width(INDENTATION);
-        sideShape.height(closeY + closeHeight / 2.f - (posY + height / 2.f));
+        sideShape.height(closeY + closeHeight / 2.f - (getPosY() + height / 2.f));
         Rectangle bottomShape = new Rectangle();
-        bottomShape.x(posX);
+        bottomShape.x(getPosX());
         bottomShape.y(closeY);
         bottomShape.width(width);
         bottomShape.height(closeHeight);
@@ -105,25 +83,39 @@ public class ForBlock extends Block {
 	}
 
     @Override
-    public void drawWithChildren(Boolean drawToggle) {
-        if (this.drawToggle != drawToggle)
-            return;
-        this.draw();
-        this.drawToggle = !this.drawToggle;
-        if (hasInBlock())
-            inBlock.drawWithChildren(drawToggle);
-        nextBlock.drawWithChildren(drawToggle);
+    public Position positionWithChildren(Position pos) {
+        setPos(pos);
+        positionNbRepetitionsBlock();
+        Position inPos = new Position(this.getPosX() + INDENTATION, this.getPosY() + this.height);
+        Position nextPos = new Position(inPos.getPosX(), inPos.getPosY() + HOLE_HEIGHT);
+        if (hasInBlock()) {
+            nextPos.setPos(inBlock.positionWithChildren(inPos));
+        }
+        closeY = nextPos.getPosY();
+        nextPos.setPos(this.getPosX(), closeY + closeHeight);
+        Position endPos = new Position(nextPos);
+        if (hasNextBlock())
+            endPos.setPos(nextBlock.positionWithChildren(nextPos));
+        return endPos;
     }
 
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (hasInBlock() && iterator < nbRepetitions.getValue()) {
-            iterator++;
-            inBlock.runWithChildren();
-        } else {
-            iterator = 0;
-            nextBlock.runWithChildren();
+        if (hasInBlock()) {
+            for (int i = 0; i < nbRepetitions.getValue(); i++)
+                inBlock.runWithChildren();
         }
+        if (hasNextBlock())
+            nextBlock.runWithChildren();
+    }
+
+    @Override
+    public void drawWithChildren() {
+        this.draw();
+        if (hasInBlock())
+            inBlock.drawWithChildren();
+        if (hasNextBlock())
+            nextBlock.drawWithChildren();
     }
 }
