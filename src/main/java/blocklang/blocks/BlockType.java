@@ -5,5 +5,6 @@ public enum BlockType {
     STOP,
     DUMMY,
     WHILE,
-    FOR;
+    FOR,
+    IF;
 }
