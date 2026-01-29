@@ -31,6 +31,6 @@ public class StopBlock extends Block {
         color.g((byte) 191);
         color.b((byte) 0);
         color.a((byte) 255);
-        DrawRectangleRounded(shape, 0.6f, 5, color);
+        DrawRectangleRounded(shape, CORNER_RADIUS / (height / 2.f), 5, color);
 	}
 }

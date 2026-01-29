@@ -28,6 +28,6 @@ public class DummyBlock extends Block {
         color.g((byte) 151);
         color.b((byte) 255);
         color.a((byte) 255);
-        DrawRectangleRounded(shape, 0.6f, 5, color);
+        DrawRectangleRounded(shape, CORNER_RADIUS / (height / 2.f), 5, color);
 	}
 }

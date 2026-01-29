@@ -23,7 +23,7 @@ public class BooleanBlock {
         this.height = height;
     }
     public BooleanBlock(Float posX, Float posY) {
-        this(posX, posY, 80.f, 40.f);
+        this(posX, posY, 45.f, 28.f);
     }
     public BooleanBlock() {
         this(0.f, 0.f);
@@ -84,7 +84,7 @@ public class BooleanBlock {
         color.r((byte) 0);
         color.g((byte) 0);
         color.b((byte) 0);
-        color.a((byte) 75);
+        color.a((byte) 50);
         DrawRectangleRec(center, color);
         DrawTriangle(leftTopVertex, leftCenterVertex, leftBottomVertex, color);
         DrawTriangle(rightBottomVertex, rightCenterVertex, rightTopVertex, color);

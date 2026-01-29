@@ -14,9 +14,11 @@ public abstract class Block {
     protected Float width;
     protected Float height;
     protected Block nextBlock;
-    protected static Float INDENTATION = 15.f;
     protected Boolean isPlaced;
     protected Boolean drawToggle;
+    protected static Float INDENTATION = 15.f;
+    protected static Float BASE_HEIGHT = 30.f;
+    protected static Float CORNER_RADIUS = 6.f;
 
     public Block(BlockType type, Float posX, Float posY, Float width, Float height) {
         this.type = type;

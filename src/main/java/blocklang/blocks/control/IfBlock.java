@@ -19,13 +19,13 @@ public class IfBlock extends Block {
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
-    static Float MARGIN_LEFT = 40.f;
-    static Float MARGIN_RIGHT = 60.f;
+    private static Float MARGIN_LEFT = 40.f;
+    private static Float MARGIN_RIGHT = 60.f;
 
     public IfBlock(Float x, Float y) {
         super(BlockType.IF, x, y, 100.f, 50.f);
         ran = false;
-        closeHeight = height * 2.f / 3.f;
+        closeHeight = BASE_HEIGHT * 2.f / 3.f;
         closeY = posY + height;
         condition = new BooleanBlock();
         positionBooleanBlock();
@@ -58,10 +58,11 @@ public class IfBlock extends Block {
     }
 
     private void positionBooleanBlock() {
-        Float margin = (this.height - condition.getHeight()) / 2.f;
+        Float margin = 3.f;
+        this.height = 2.f * margin + condition.getHeight();
+        this.width = MARGIN_LEFT + 2.f * margin + condition.getWidth() + MARGIN_RIGHT;
         condition.setPosX(this.posX + MARGIN_LEFT + margin);
         condition.setPosY(this.posY + margin);
-        this.width = MARGIN_LEFT + 2.f * margin + condition.getWidth() + MARGIN_RIGHT;
     }
     public Boolean hasInBlock() {
         return inBlock != null;
@@ -95,9 +96,9 @@ public class IfBlock extends Block {
         color.g((byte) 171);
         color.b((byte) 25);
         color.a((byte) 255);
-        DrawRectangleRounded(topShape, 0.6f, 5, color);
+        DrawRectangleRounded(topShape, CORNER_RADIUS / (height / 2.f), 5, color);
         DrawRectangleRec(sideShape, color);
-        DrawRectangleRounded(bottomShape, 0.9f, 5, color);
+        DrawRectangleRounded(bottomShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
         condition.draw();
 	}
 

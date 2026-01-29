@@ -19,11 +19,12 @@ public class ForBlock extends Block {
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
-    static Float BASE_WIDTH = 100.f;
+    private static Float MARGIN_LEFT = 100.f;
+    private static Float MARGIN_RIGHT = 10.f;
 
     public ForBlock(Float x, Float y) {
         super(BlockType.FOR, x, y, 100.f, 40.f);
-        closeHeight = height * 2.f / 3.f;
+        closeHeight = BASE_HEIGHT * 2.f / 3.f;
         closeY = posY + height;
         nbRepetitions = new NumberBlock();
         positionNbRepetitionsBlock();
@@ -59,10 +60,11 @@ public class ForBlock extends Block {
     }
 
     private void positionNbRepetitionsBlock() {
-        Float margin = (this.height - nbRepetitions.getHeight()) / 2.f;
-        nbRepetitions.setPosX(this.posX + BASE_WIDTH + margin);
+        Float margin = 3.f;
+        this.height = 2.f * margin + nbRepetitions.getHeight();
+        this.width = MARGIN_LEFT + 2.f * margin + nbRepetitions.getWidth() + MARGIN_RIGHT;
+        nbRepetitions.setPosX(this.posX + MARGIN_LEFT + margin);
         nbRepetitions.setPosY(this.posY + margin);
-        this.width = BASE_WIDTH + 2.f * margin + nbRepetitions.getWidth();
     }
     public Boolean hasInBlock() {
         return inBlock != null;
@@ -89,16 +91,16 @@ public class ForBlock extends Block {
         Rectangle bottomShape = new Rectangle();
         bottomShape.x(posX);
         bottomShape.y(closeY);
-        bottomShape.width(BASE_WIDTH);
+        bottomShape.width(width);
         bottomShape.height(closeHeight);
         Color color = new Color();
         color.r((byte) 255);
         color.g((byte) 171);
         color.b((byte) 25);
         color.a((byte) 255);
-        DrawRectangleRounded(topShape, 0.6f, 5, color);
+        DrawRectangleRounded(topShape, CORNER_RADIUS / (height / 2.f), 5, color);
         DrawRectangleRec(sideShape, color);
-        DrawRectangleRounded(bottomShape, 0.9f, 5, color);
+        DrawRectangleRounded(bottomShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
         nbRepetitions.draw();
 	}
 

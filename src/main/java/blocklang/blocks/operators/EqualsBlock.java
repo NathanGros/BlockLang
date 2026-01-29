@@ -53,14 +53,14 @@ public class EqualsBlock extends BooleanBlock {
     }
 
     private void positionValueBlocks() {
-        Float marginValue1 = (this.height - value1.getHeight()) / 2.f;
-        Float marginValue2 = (this.height - value2.getHeight()) / 2.f;
-        Float margin = Math.max(marginValue1, marginValue2);
-        value1.setPosX(this.posX + height / 2.f + margin);
-        value1.setPosY(this.posY + margin);
-        value2.setPosX(value1.getPosX() + value1.getWidth() + CENTER_WIDTH + 2.f * margin);
-        value2.setPosY(this.posY + margin);
+        Float margin = 3.f;
+        Float valuesHeight = Math.max(value1.getHeight(), value2.getHeight());
+        this.height = 2.f * margin + valuesHeight;
         this.width = CENTER_WIDTH + 4.f * margin + height + value1.getWidth() + value2.getWidth();
+        value1.setPosX(this.posX + height / 2.f + margin);
+        value1.setPosY(this.posY + margin + (valuesHeight - value1.getHeight()) / 2.f);
+        value2.setPosX(value1.getPosX() + value1.getWidth() + CENTER_WIDTH + 2.f * margin);
+        value2.setPosY(this.posY + margin + (valuesHeight - value2.getHeight()) / 2.f);
     }
 	@Override
 	public Boolean isTrue() {
