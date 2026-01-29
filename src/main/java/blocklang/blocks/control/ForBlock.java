@@ -8,12 +8,13 @@ import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
+import blocklang.blocks.variables.NumberBlock;
 
 /**
  * ForBlock
  */
 public class ForBlock extends Block {
-    private Integer nbRepetitions;
+    private NumberBlock nbRepetitions;
     private Integer iterator;
     private Block inBlock;
     private Float closeHeight;
@@ -23,7 +24,7 @@ public class ForBlock extends Block {
         super(BlockType.FOR, x, y, 100.f, 30.f);
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
-        nbRepetitions = 0;
+        nbRepetitions = new NumberBlock();
         iterator = 0;
     }
     public ForBlock() {
@@ -34,7 +35,9 @@ public class ForBlock extends Block {
         this.closeY = closeY;
     }
     public void setNbRepetitions(Integer nbRepetitions) {
-        this.nbRepetitions = nbRepetitions;
+        NumberBlock n = new NumberBlock();
+        n.setValue(nbRepetitions.floatValue());
+        this.nbRepetitions = n;
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
@@ -102,7 +105,7 @@ public class ForBlock extends Block {
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (hasInBlock() && iterator < nbRepetitions) {
+        if (hasInBlock() && iterator < nbRepetitions.getValue()) {
             iterator++;
             inBlock.runWithChildren();
         } else {
