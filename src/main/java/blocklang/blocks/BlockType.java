@@ -6,5 +6,6 @@ public enum BlockType {
     DUMMY,
     WHILE,
     FOR,
-    IF;
+    IF,
+    IF_ELSE;
 }
