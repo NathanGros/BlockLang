@@ -17,7 +17,7 @@ public class EqualsBlock extends ConditionBlock {
     private ValueBlock value2;
 
     public EqualsBlock(Float posX, Float posY) {
-        super(posX, posY, 100.f, 24.f);
+        super(posX, posY, 100.f, 30.f);
     }
     public EqualsBlock() {
         this(0.f, 0.f);

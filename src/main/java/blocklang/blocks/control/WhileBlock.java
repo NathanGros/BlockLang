@@ -9,6 +9,7 @@ import com.raylib.Raylib.Rectangle;
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.ConditionBlock;
+import blocklang.blocks.operators.EqualsBlock;
 
 /**
  * WhileBlock
@@ -18,11 +19,14 @@ public class WhileBlock extends Block {
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
+    static Float BASE_WIDTH = 100.f;
 
     public WhileBlock(Float x, Float y) {
-        super(BlockType.WHILE, x, y, 100.f, 30.f);
+        super(BlockType.WHILE, x, y, 100.f, 40.f);
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
+        condition = new EqualsBlock();
+        positionConditionBlock();
     }
     public WhileBlock() {
         this(0.f, 0.f);
@@ -33,6 +37,7 @@ public class WhileBlock extends Block {
     }
     public void setConditionBlock(ConditionBlock condition) {
         this.condition = condition;
+        positionConditionBlock();
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
@@ -50,6 +55,12 @@ public class WhileBlock extends Block {
         return inBlock;
     }
 
+    private void positionConditionBlock() {
+        Float margin = (this.height - condition.getHeight()) / 2.f;
+        condition.setPosX(this.posX + BASE_WIDTH + margin);
+        condition.setPosY(this.posY + margin);
+        this.width = BASE_WIDTH + 2.f * margin + condition.getWidth();
+    }
     public Boolean hasInBlock() {
         return inBlock != null;
     }
@@ -57,6 +68,7 @@ public class WhileBlock extends Block {
     public void place() {
         this.isPlaced = true;
         closeY = posY + height;
+        positionConditionBlock();
     }
 
 	@Override
@@ -74,7 +86,7 @@ public class WhileBlock extends Block {
         Rectangle bottomShape = new Rectangle();
         bottomShape.x(posX);
         bottomShape.y(closeY);
-        bottomShape.width(width);
+        bottomShape.width(BASE_WIDTH);
         bottomShape.height(closeHeight);
         Color color = new Color();
         color.r((byte) 255);
@@ -84,6 +96,7 @@ public class WhileBlock extends Block {
         DrawRectangleRounded(topShape, 0.6f, 5, color);
         DrawRectangleRec(sideShape, color);
         DrawRectangleRounded(bottomShape, 0.9f, 5, color);
+        condition.draw();
 	}
 
     @Override

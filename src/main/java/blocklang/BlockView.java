@@ -24,6 +24,7 @@ public class BlockView {
         WhileBlock whileBlock2 = new WhileBlock();
         EqualsBlock equalsBlock2 = new EqualsBlock();
         DummyBlock dummyBlock2 = new DummyBlock();
+        DummyBlock dummyBlock3 = new DummyBlock();
         StopBlock stopBlock = new StopBlock();
         startBlock.setNextBlock(dummyBlock1);
         dummyBlock1.setNextBlock(forBlock);
@@ -32,12 +33,14 @@ public class BlockView {
         dummyBlock2.setNextBlock(whileBlock1);
         equalsBlock1.setValue1(3);
         equalsBlock1.setValue2(4);
-        whileBlock1.setConditionBlock(equalsBlock2);
+        whileBlock1.setConditionBlock(equalsBlock1);
         whileBlock1.setNextBlock(forBlock);
         forBlock.setNextBlock(whileBlock2);
         equalsBlock2.setValue1(5);
         equalsBlock2.setValue2(6);
         whileBlock2.setConditionBlock(equalsBlock2);
+        whileBlock2.setInBlock(dummyBlock3);
+        dummyBlock3.setNextBlock(whileBlock2);
         whileBlock2.setNextBlock(stopBlock);
         roots.add(startBlock);
     }

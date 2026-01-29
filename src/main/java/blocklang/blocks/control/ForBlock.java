@@ -26,6 +26,7 @@ public class ForBlock extends Block {
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
         nbRepetitions = new NumberBlock();
+        positionNbRepetitionsBlock();
         iterator = 0;
     }
     public ForBlock() {
