@@ -7,14 +7,14 @@ import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
-import blocklang.blocks.ConditionBlock;
+import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.ValueBlock;
 import blocklang.blocks.variables.NumberBlock;
 
 /**
  * CompareBlock
  */
-public class EqualsBlock extends ConditionBlock {
+public class EqualsBlock extends BooleanBlock {
     private ValueBlock value1;
     private ValueBlock value2;
     static Float CENTER_WIDTH = 20.f;

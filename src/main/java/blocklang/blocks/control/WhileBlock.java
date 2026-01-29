@@ -8,14 +8,14 @@ import com.raylib.Raylib.Rectangle;
 
 import blocklang.blocks.Block;
 import blocklang.blocks.BlockType;
-import blocklang.blocks.ConditionBlock;
+import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.operators.EqualsBlock;
 
 /**
  * WhileBlock
  */
 public class WhileBlock extends Block {
-    private ConditionBlock condition;
+    private BooleanBlock condition;
     private Block inBlock;
     private Float closeHeight;
     private Float closeY;
@@ -26,7 +26,7 @@ public class WhileBlock extends Block {
         closeHeight = height * 2.f / 3.f;
         closeY = posY + height;
         condition = new EqualsBlock();
-        positionConditionBlock();
+        positionBooleanBlock();
     }
     public WhileBlock() {
         this(0.f, 0.f);
@@ -35,9 +35,9 @@ public class WhileBlock extends Block {
     public void setCloseY(Float closeY) {
         this.closeY = closeY;
     }
-    public void setConditionBlock(ConditionBlock condition) {
+    public void setConditionBlock(BooleanBlock condition) {
         this.condition = condition;
-        positionConditionBlock();
+        positionBooleanBlock();
     }
     public void setInBlock(Block inBlock) {
         this.inBlock = inBlock;
@@ -55,7 +55,7 @@ public class WhileBlock extends Block {
         return inBlock;
     }
 
-    private void positionConditionBlock() {
+    private void positionBooleanBlock() {
         Float margin = (this.height - condition.getHeight()) / 2.f;
         condition.setPosX(this.posX + BASE_WIDTH + margin);
         condition.setPosY(this.posY + margin);
@@ -68,7 +68,7 @@ public class WhileBlock extends Block {
     public void place() {
         this.isPlaced = true;
         closeY = posY + height;
-        positionConditionBlock();
+        positionBooleanBlock();
     }
 
 	@Override

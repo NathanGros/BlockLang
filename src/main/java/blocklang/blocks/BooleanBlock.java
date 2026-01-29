@@ -1,15 +1,15 @@
 package blocklang.blocks;
 
 /**
- * ConditionBlock
+ * BooleanBlock
  */
-public abstract class ConditionBlock {
+public abstract class BooleanBlock {
     protected Float posX;
     protected Float posY;
     protected Float width;
     protected Float height;
 
-    public ConditionBlock(Float posX, Float posY, Float width, Float height) {
+    public BooleanBlock(Float posX, Float posY, Float width, Float height) {
         this.posX = posX;
         this.posY = posY;
         this.width = width;
