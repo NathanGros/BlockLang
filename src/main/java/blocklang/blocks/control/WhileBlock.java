@@ -44,22 +44,7 @@ public class WhileBlock extends Block {
     }
     @Override
     public void setNextBlock(Block nextBlock) {
-        this.nextBlock = nextBlock;
-        if (nextBlock.getBlockType().equals(BlockType.WHILE) && nextBlock.isPlaced()) {
-            WhileBlock whileBlock = (WhileBlock) nextBlock;
-            whileBlock.setCloseY(this.closeY + this.closeHeight);
-            return;
-        }
-        if (nextBlock.getBlockType().equals(BlockType.FOR) && nextBlock.isPlaced()) {
-            ForBlock forBlock = (ForBlock) nextBlock;
-            forBlock.setCloseY(this.closeY + this.closeHeight);
-            return;
-        }
-        if (nextBlock.isPlaced())
-            return;
-        nextBlock.setPosX(this.posX);
-        nextBlock.setPosY(this.closeY + this.closeHeight);
-        nextBlock.place();
+        setNextBlockAtHeight(nextBlock, this.closeY + this.closeHeight);
     }
     public Block getInBlock() {
         return inBlock;

@@ -48,23 +48,26 @@ public abstract class Block {
     public Float getHeight() {
         return height;
     }
-    public void setNextBlock(Block nextBlock) {
+    protected void setNextBlockAtHeight(Block nextBlock, Float nextPosY) {
         this.nextBlock = nextBlock;
-        if (nextBlock.getBlockType().equals(BlockType.WHILE) && nextBlock.isPlaced()) {
+        if (nextBlock.isPlaced() && nextBlock.getBlockType().equals(BlockType.WHILE)) {
             WhileBlock whileBlock = (WhileBlock) nextBlock;
-            whileBlock.setCloseY(this.posY + this.height);
+            whileBlock.setCloseY(nextPosY);
             return;
         }
-        if (nextBlock.getBlockType().equals(BlockType.FOR) && nextBlock.isPlaced()) {
+        if (nextBlock.isPlaced() && nextBlock.getBlockType().equals(BlockType.FOR)) {
             ForBlock forBlock = (ForBlock) nextBlock;
-            forBlock.setCloseY(this.posY + this.height);
+            forBlock.setCloseY(nextPosY);
             return;
         }
         if (nextBlock.isPlaced())
             return;
         nextBlock.setPosX(this.posX);
-        nextBlock.setPosY(this.posY + this.height);
+        nextBlock.setPosY(nextPosY);
         nextBlock.place();
+    }
+    public void setNextBlock(Block nextBlock) {
+        setNextBlockAtHeight(nextBlock, this.posY + this.height);
     }
     public Block getNextBlock() {
         return nextBlock;
