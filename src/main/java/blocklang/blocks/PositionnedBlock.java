@@ -1,5 +1,7 @@
 package blocklang.blocks;
 
+import com.raylib.Raylib.Vector2;
+
 /**
  * PositionnedBlock
  */
@@ -52,4 +54,6 @@ public abstract class PositionnedBlock {
     public void drawWithChildren() {
         this.draw();
     }
+
+    public abstract PositionnedBlock selectWithChildren(Vector2 mousePos);
 }

@@ -2,6 +2,7 @@ package blocklang;
 
 import static com.raylib.Raylib.*;
 
+import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 
 import static com.raylib.Colors.*;
@@ -17,7 +18,8 @@ public class Main {
         blockView.runAll();
 
         Boolean dragScreenMode = false;
-        PositionnedBlock selectedBlock;
+        Boolean moveSelectedBlockMode = false;
+        PositionnedBlock selectedBlock = null;
         Vector2 mousePosition = GetMousePosition();
 
         SetConfigFlags(FLAG_MSAA_4X_HINT);
@@ -55,15 +57,22 @@ public class Main {
             if (camera.zoom() > 3.f)
                 camera.zoom(3.f);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                selectedBlock = blockView.getSelectedBlock(GetMousePosition());
+                selectedBlock = blockView.selectBlock(GetScreenToWorld2D(GetMousePosition(), camera));
                 if (selectedBlock == null) {
                     dragScreenMode = true;
+                    mousePosition = GetMousePosition();
+                } else {
+                    moveSelectedBlockMode = true;
                     mousePosition = GetMousePosition();
                 }
             }
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 if (dragScreenMode) {
                     dragScreenMode = false;
+                }
+                if (moveSelectedBlockMode) {
+                    moveSelectedBlockMode = false;
+                    selectedBlock = null;
                 }
             }
             if (dragScreenMode) {
@@ -73,12 +82,27 @@ public class Main {
                 camera.target(Vector2Add(Vector2Subtract(camera.target(), newMouseWorldPosition), oldMouseWorldPosition));
                 mousePosition = newMousePosition;
             }
+            if (moveSelectedBlockMode) {
+                Vector2 newMousePosition = GetMousePosition();
+                Vector2 oldMouseWorldPosition = GetScreenToWorld2D(mousePosition, camera);
+                Vector2 newMouseWorldPosition = GetScreenToWorld2D(newMousePosition, camera);
+                Vector2 moveVector = Vector2Subtract(newMouseWorldPosition, oldMouseWorldPosition);
+                Vector2 oldBlockPosition = new Vector2();
+                oldBlockPosition.x(selectedBlock.getPosX());
+                oldBlockPosition.y(selectedBlock.getPosY());
+                Vector2 newBlockPosition = Vector2Add(oldBlockPosition, moveVector);
+                selectedBlock.positionWithChildren(new Position(newBlockPosition.x(), newBlockPosition.y()));
+                mousePosition = newMousePosition;
+            }
 
             // Draw
             BeginDrawing();
                 ClearBackground(RAYWHITE);
                 BeginMode2D(camera);
                 blockView.drawAll();
+                if (selectedBlock != null) {
+                    selectedBlock.drawWithChildren();
+                }
                 EndMode2D();
             EndDrawing();
         }

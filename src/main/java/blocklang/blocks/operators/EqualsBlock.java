@@ -1,5 +1,6 @@
 package blocklang.blocks.operators;
 
+import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawPoly;
 import static com.raylib.Raylib.DrawRectangleRec;
 
@@ -9,6 +10,7 @@ import com.raylib.Raylib.Vector2;
 
 import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.Position;
+import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.ValueBlock;
 import blocklang.blocks.variables.NumberBlock;
 
@@ -106,5 +108,29 @@ public class EqualsBlock extends BooleanBlock {
         draw();
         value1.drawWithChildren();
         value2.drawWithChildren();
+    }
+
+    public PositionnedBlock selectWithChildren(Vector2 mousePos) {
+        Rectangle shape = new Rectangle();
+        shape.x(getPosX());
+        shape.y(getPosY());
+        shape.width(width);
+        shape.height(height);
+        if (CheckCollisionPointRec(mousePos, shape)) {
+            PositionnedBlock selected1 = value1.selectWithChildren(mousePos);
+            if (selected1 != null) {
+                if (selected1 == value1)
+                    value1 = null;
+                return selected1;
+            }
+            PositionnedBlock selected2 = value2.selectWithChildren(mousePos);
+            if (selected2 != null) {
+                if (selected2 == value2)
+                    value2 = null;
+                return selected2;
+            }
+            return this;
+        }
+        return null;
     }
 }

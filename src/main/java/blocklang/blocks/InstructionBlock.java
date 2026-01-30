@@ -1,5 +1,10 @@
 package blocklang.blocks;
 
+import static com.raylib.Raylib.CheckCollisionPointRec;
+
+import com.raylib.Raylib.Rectangle;
+import com.raylib.Raylib.Vector2;
+
 /**
  * InstructionBlock
  */
@@ -48,5 +53,22 @@ public abstract class InstructionBlock extends PositionnedBlock {
         this.draw();
         if (hasNextBlock())
             nextBlock.drawWithChildren();
+    }
+
+    public PositionnedBlock selectWithChildren(Vector2 mousePos) {
+        Rectangle shape = new Rectangle();
+        shape.x(getPosX());
+        shape.y(getPosY());
+        shape.width(width);
+        shape.height(height);
+        if (CheckCollisionPointRec(mousePos, shape))
+            return this;
+        if (hasNextBlock()) {
+            PositionnedBlock selected = nextBlock.selectWithChildren(mousePos);
+            if (selected == nextBlock)
+                nextBlock = null;
+            return selected;
+        }
+        return null;
     }
 }

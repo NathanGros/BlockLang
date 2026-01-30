@@ -78,7 +78,15 @@ public class BlockView {
         }
     }
 
-    public PositionnedBlock getSelectedBlock(Vector2 mousePosition) {
+    public PositionnedBlock selectBlock(Vector2 mouseWorldPosition) {
+        for (PositionnedBlock root: roots) {
+            PositionnedBlock selectedBlock = root.selectWithChildren(mouseWorldPosition);
+            if (selectedBlock != null) {
+                roots.add(selectedBlock);
+                positionAll();
+                return selectedBlock;
+            }
+        }
         return null;
     }
 }

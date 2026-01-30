@@ -1,14 +1,17 @@
 package blocklang.blocks.control;
 
+import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawRectangleRec;
 import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
+import com.raylib.Raylib.Vector2;
 
 import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.Position;
+import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.BooleanBlock;
 
 /**
@@ -147,5 +150,47 @@ public class IfElseBlock extends InstructionBlock {
             inFalseBlock.drawWithChildren();
         if (hasNextBlock())
             nextBlock.drawWithChildren();
+    }
+
+    public PositionnedBlock selectWithChildren(Vector2 mousePos) {
+        Rectangle shape = new Rectangle();
+        shape.x(getPosX());
+        shape.y(getPosY());
+        shape.width(width);
+        shape.height(height);
+        if (CheckCollisionPointRec(mousePos, shape)) {
+            PositionnedBlock selected = condition.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == condition)
+                    condition = new BooleanBlock();
+                return selected;
+            }
+            return this;
+        }
+        if (hasInTrueBlock()) {
+            PositionnedBlock selected = inTrueBlock.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == inTrueBlock)
+                    inTrueBlock = null;
+                return selected;
+            }
+        }
+        if (hasInFalseBlock()) {
+            PositionnedBlock selected = inFalseBlock.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == inFalseBlock)
+                    inFalseBlock = null;
+                return selected;
+            }
+        }
+        if (hasNextBlock()) {
+            PositionnedBlock selected = nextBlock.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == nextBlock)
+                    nextBlock = null;
+                return selected;
+            }
+        }
+        return null;
     }
 }

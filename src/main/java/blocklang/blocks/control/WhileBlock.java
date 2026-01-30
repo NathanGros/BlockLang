@@ -1,15 +1,18 @@
 package blocklang.blocks.control;
 
+import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawRectangleRec;
 import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
+import com.raylib.Raylib.Vector2;
 
 import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.Position;
+import blocklang.blocks.PositionnedBlock;
 
 /**
  * WhileBlock
@@ -119,5 +122,39 @@ public class WhileBlock extends InstructionBlock {
             inBlock.drawWithChildren();
         if (hasNextBlock())
             nextBlock.drawWithChildren();
+    }
+
+    public PositionnedBlock selectWithChildren(Vector2 mousePos) {
+        Rectangle shape = new Rectangle();
+        shape.x(getPosX());
+        shape.y(getPosY());
+        shape.width(width);
+        shape.height(height);
+        if (CheckCollisionPointRec(mousePos, shape)) {
+            PositionnedBlock selected = condition.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == condition)
+                    condition = new BooleanBlock();
+                return selected;
+            }
+            return this;
+        }
+        if (hasInBlock()) {
+            PositionnedBlock selected = inBlock.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == inBlock)
+                    inBlock = null;
+                return selected;
+            }
+        }
+        if (hasNextBlock()) {
+            PositionnedBlock selected = nextBlock.selectWithChildren(mousePos);
+            if (selected != null) {
+                if (selected == nextBlock)
+                    nextBlock = null;
+                return selected;
+            }
+        }
+        return null;
     }
 }
