@@ -79,10 +79,21 @@ public class BlockView {
     }
 
     public PositionnedBlock selectBlock(Vector2 mouseWorldPosition) {
+        List<PositionnedBlock> newRoots = new ArrayList<>();
+        for (PositionnedBlock root: roots) {
+            newRoots.add(root);
+        }
         for (PositionnedBlock root: roots) {
             PositionnedBlock selectedBlock = root.selectWithChildren(mouseWorldPosition);
             if (selectedBlock != null) {
-                roots.add(selectedBlock);
+                if (selectedBlock == root) {
+                    newRoots.remove(root);
+                    newRoots.add(root);
+                } else {
+                    newRoots.add(selectedBlock);
+                }
+                System.out.println("root:" + roots.size() + ", newroots:" + newRoots.size());
+                roots = newRoots;
                 positionAll();
                 return selectedBlock;
             }
