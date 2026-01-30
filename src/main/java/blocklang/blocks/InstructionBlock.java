@@ -3,52 +3,20 @@ package blocklang.blocks;
 /**
  * InstructionBlock
  */
-public abstract class InstructionBlock {
+public abstract class InstructionBlock extends PositionnedBlock {
     protected BlockType type;
-    protected Position pos;
-    protected Float width;
-    protected Float height;
     protected InstructionBlock nextBlock;
     protected static Float INDENTATION = 15.f;
     protected static Float BASE_HEIGHT = 30.f;
     protected static Float CORNER_RADIUS = 6.f;
 
     public InstructionBlock(BlockType type, Float posX, Float posY, Float width, Float height) {
+        super(posX, posY, width, height);
         this.type = type;
-        this.pos = new Position(posX, posY);
-        this.width = width;
-        this.height = height;
     }
 
     public BlockType getBlockType() {
         return type;
-    }
-    public void setPosX(Float posX) {
-        this.pos.setPosX(posX);
-    }
-    public Float getPosX() {
-        return pos.getPosX();
-    }
-    public void setPosY(Float posY) {
-        this.pos.setPosY(posY);
-    }
-    public Float getPosY() {
-        return pos.getPosY();
-    }
-    public void setPos(Float posX, Float posY) {
-        pos = new Position(posX, posY);
-    }
-    public void setPos(Position pos) {
-        this.pos = new Position(pos.getPosX(), pos.getPosY());
-    }
-    public Position getPos() {
-        return new Position(pos.getPosX(), pos.getPosY());
-    }
-    public Float getWidth() {
-        return width;
-    }
-    public Float getHeight() {
-        return height;
     }
     public void setNextBlock(InstructionBlock nextBlock) {
         this.nextBlock = nextBlock;
@@ -60,8 +28,6 @@ public abstract class InstructionBlock {
     public Boolean hasNextBlock() {
         return nextBlock != null;
     }
-
-    public abstract void draw();
 
     public Position positionWithChildren(Position pos) {
         setPos(pos);

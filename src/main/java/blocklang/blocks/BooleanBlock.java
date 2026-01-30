@@ -10,49 +10,15 @@ import com.raylib.Raylib.Vector2;
 /**
  * BooleanBlock
  */
-public class BooleanBlock {
-    protected Position pos;
-    protected Float width;
-    protected Float height;
-
+public class BooleanBlock extends PositionnedBlock {
     public BooleanBlock(Float posX, Float posY, Float width, Float height) {
-        this.pos = new Position(posX, posY);
-        this.width = width;
-        this.height = height;
+        super(posX, posY, width, height);
     }
     public BooleanBlock(Float posX, Float posY) {
         this(posX, posY, 45.f, 28.f);
     }
     public BooleanBlock() {
         this(0.f, 0.f);
-    }
-
-    public void setPosX(Float posX) {
-        this.pos.setPosX(posX);
-    }
-    public Float getPosX() {
-        return pos.getPosX();
-    }
-    public void setPosY(Float posY) {
-        this.pos.setPosY(posY);
-    }
-    public Float getPosY() {
-        return pos.getPosY();
-    }
-    public void setPos(Float posX, Float posY) {
-        pos = new Position(posX, posY);
-    }
-    public void setPos(Position pos) {
-        this.pos = new Position(pos.getPosX(), pos.getPosY());
-    }
-    public Position getPos() {
-        return new Position(pos.getPosX(), pos.getPosY());
-    }
-    public Float getWidth() {
-        return width;
-    }
-    public Float getHeight() {
-        return height;
     }
 
     public Boolean isTrue() {

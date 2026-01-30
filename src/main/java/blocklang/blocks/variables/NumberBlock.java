@@ -5,7 +5,6 @@ import static com.raylib.Raylib.DrawRectangleRounded;
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
-import blocklang.blocks.Position;
 import blocklang.blocks.ValueBlock;
 
 /**
