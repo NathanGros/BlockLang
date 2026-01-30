@@ -6,7 +6,7 @@ import static com.raylib.Raylib.DrawRectangleRounded;
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
-import blocklang.blocks.Block;
+import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.Position;
 import blocklang.blocks.BooleanBlock;
@@ -14,10 +14,10 @@ import blocklang.blocks.BooleanBlock;
 /**
  * IfElseBlock
  */
-public class IfElseBlock extends Block {
+public class IfElseBlock extends InstructionBlock {
     private BooleanBlock condition;
-    private Block inTrueBlock;
-    private Block inFalseBlock;
+    private InstructionBlock inTrueBlock;
+    private InstructionBlock inFalseBlock;
     private Float middleHeight;
     private Float middleY;
     private Float closeHeight;
@@ -42,16 +42,16 @@ public class IfElseBlock extends Block {
     public void setConditionBlock(BooleanBlock condition) {
         this.condition = condition;
     }
-    public void setInTrueBlock(Block inTrueBlock) {
+    public void setInTrueBlock(InstructionBlock inTrueBlock) {
         this.inTrueBlock = inTrueBlock;
     }
-    public void setInFalseBlock(Block inFalseBlock) {
+    public void setInFalseBlock(InstructionBlock inFalseBlock) {
         this.inFalseBlock = inFalseBlock;
     }
-    public Block getInTrueBlock() {
+    public InstructionBlock getInTrueBlock() {
         return inTrueBlock;
     }
-    public Block getInFalseBlock() {
+    public InstructionBlock getInFalseBlock() {
         return inFalseBlock;
     }
 

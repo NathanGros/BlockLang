@@ -6,7 +6,7 @@ import static com.raylib.Raylib.DrawRectangleRounded;
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
-import blocklang.blocks.Block;
+import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.Position;
 import blocklang.blocks.variables.NumberBlock;
@@ -14,9 +14,9 @@ import blocklang.blocks.variables.NumberBlock;
 /**
  * ForBlock
  */
-public class ForBlock extends Block {
+public class ForBlock extends InstructionBlock {
     private NumberBlock nbRepetitions;
-    private Block inBlock;
+    private InstructionBlock inBlock;
     private Float closeHeight;
     private Float closeY;
     private static Float MARGIN_LEFT = 100.f;
@@ -37,10 +37,10 @@ public class ForBlock extends Block {
         n.setValue(nbRepetitions.floatValue());
         this.nbRepetitions = n;
     }
-    public void setInBlock(Block inBlock) {
+    public void setInBlock(InstructionBlock inBlock) {
         this.inBlock = inBlock;
     }
-    public Block getInBlock() {
+    public InstructionBlock getInBlock() {
         return inBlock;
     }
 

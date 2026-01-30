@@ -8,7 +8,7 @@ import com.raylib.Raylib.Rectangle;
 /**
  * DummyBlock
  */
-public class DummyBlock extends Block {
+public class DummyBlock extends InstructionBlock {
     public DummyBlock(Float x, Float y) {
         super(BlockType.DUMMY, x, y, 200.f, 30.f);
     }

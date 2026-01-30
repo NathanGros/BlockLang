@@ -1,19 +1,19 @@
 package blocklang.blocks;
 
 /**
- * Block
+ * InstructionBlock
  */
-public abstract class Block {
+public abstract class InstructionBlock {
     protected BlockType type;
     protected Position pos;
     protected Float width;
     protected Float height;
-    protected Block nextBlock;
+    protected InstructionBlock nextBlock;
     protected static Float INDENTATION = 15.f;
     protected static Float BASE_HEIGHT = 30.f;
     protected static Float CORNER_RADIUS = 6.f;
 
-    public Block(BlockType type, Float posX, Float posY, Float width, Float height) {
+    public InstructionBlock(BlockType type, Float posX, Float posY, Float width, Float height) {
         this.type = type;
         this.pos = new Position(posX, posY);
         this.width = width;
@@ -50,10 +50,10 @@ public abstract class Block {
     public Float getHeight() {
         return height;
     }
-    public void setNextBlock(Block nextBlock) {
+    public void setNextBlock(InstructionBlock nextBlock) {
         this.nextBlock = nextBlock;
     }
-    public Block getNextBlock() {
+    public InstructionBlock getNextBlock() {
         return nextBlock;
     }
 

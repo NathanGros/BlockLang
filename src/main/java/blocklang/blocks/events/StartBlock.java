@@ -5,13 +5,13 @@ import static com.raylib.Raylib.DrawRectangleRounded;
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 
-import blocklang.blocks.Block;
+import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 
 /**
  * StartBlock
  */
-public class StartBlock extends Block {
+public class StartBlock extends InstructionBlock {
     public StartBlock(Float x, Float y) {
         super(BlockType.START, x, y, 180.f, 30.f);
     }
