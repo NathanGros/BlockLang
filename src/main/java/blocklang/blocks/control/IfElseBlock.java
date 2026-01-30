@@ -152,6 +152,7 @@ public class IfElseBlock extends InstructionBlock {
             nextBlock.drawWithChildren();
     }
 
+    @Override
     public PositionnedBlock selectWithChildren(Vector2 mousePos) {
         Rectangle shape = new Rectangle();
         shape.x(getPosX());
@@ -192,5 +193,62 @@ public class IfElseBlock extends InstructionBlock {
             }
         }
         return null;
+    }
+
+    @Override
+    public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
+        if (condition.insertWithChildren(selectedBlock, mousePos))
+            return true;
+        if (hasNextBlock()) {
+            if (nextBlock.insertWithChildren(selectedBlock, mousePos))
+                return true;
+        }
+        if (hasInTrueBlock()) {
+            if (inTrueBlock.insertWithChildren(selectedBlock, mousePos))
+                return true;
+        }
+        if (hasInFalseBlock()) {
+            if (inFalseBlock.insertWithChildren(selectedBlock, mousePos))
+                return true;
+        }
+        if (selectedBlock instanceof InstructionBlock selectedInstructionBlock) {
+            // Try to insert in true
+            Rectangle insertInTrueShape = new Rectangle();
+            insertInTrueShape.x(getPosX());
+            insertInTrueShape.y(getPosY());
+            insertInTrueShape.width(width);
+            insertInTrueShape.height(height);
+            if (CheckCollisionPointRec(mousePos, insertInTrueShape)) {
+                InstructionBlock oldInTrueBlock = inTrueBlock;
+                inTrueBlock = selectedInstructionBlock;
+                selectedInstructionBlock.appendLastWithChildren(oldInTrueBlock);
+                return true;
+            }
+            // Try to insert in false
+            Rectangle insertInFalseShape = new Rectangle();
+            insertInFalseShape.x(getPosX());
+            insertInFalseShape.y(middleY);
+            insertInFalseShape.width(width);
+            insertInFalseShape.height(middleHeight);
+            if (CheckCollisionPointRec(mousePos, insertInFalseShape)) {
+                InstructionBlock oldInFalseBlock = inFalseBlock;
+                inFalseBlock = selectedInstructionBlock;
+                selectedInstructionBlock.appendLastWithChildren(oldInFalseBlock);
+                return true;
+            }
+            // Try to insert next
+            Rectangle insertNextShape = new Rectangle();
+            insertNextShape.x(getPosX());
+            insertNextShape.y(closeY);
+            insertNextShape.width(width);
+            insertNextShape.height(closeHeight);
+            if (CheckCollisionPointRec(mousePos, insertNextShape)) {
+                InstructionBlock oldNextBlock = nextBlock;
+                nextBlock = selectedInstructionBlock;
+                selectedInstructionBlock.appendLastWithChildren(oldNextBlock);
+                return true;
+            }
+        }
+        return false;
     }
 }

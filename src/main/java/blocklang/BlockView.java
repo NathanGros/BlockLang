@@ -92,12 +92,25 @@ public class BlockView {
                 } else {
                     newRoots.add(selectedBlock);
                 }
-                System.out.println("root:" + roots.size() + ", newroots:" + newRoots.size());
                 roots = newRoots;
                 positionAll();
                 return selectedBlock;
             }
         }
         return null;
+    }
+
+    public void insertBlockAtPos(PositionnedBlock selectedBlock, Vector2 mouseWorldPosition) {
+        for (PositionnedBlock root: roots) {
+            if (selectedBlock == root) {
+                continue;
+            }
+            Boolean inserted = root.insertWithChildren(selectedBlock, mouseWorldPosition);
+            if (inserted) {
+                roots.remove(selectedBlock);
+                positionAll();
+                return;
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
 package blocklang.blocks;
 
-import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawRectangleRec;
 import static com.raylib.Raylib.DrawTriangle;
 
@@ -67,4 +66,9 @@ public class BooleanBlock extends PositionnedBlock {
     public PositionnedBlock selectWithChildren(Vector2 mousePos) {
         return null;
     }
+
+	@Override
+	public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
+        return false;
+	}
 }

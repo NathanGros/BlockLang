@@ -133,4 +133,13 @@ public class EqualsBlock extends BooleanBlock {
         }
         return null;
     }
+
+    @Override
+    public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
+        if (value1.insertWithChildren(selectedBlock, mousePos))
+            return true;
+        if (value2.insertWithChildren(selectedBlock, mousePos))
+            return true;
+        return false;
+    }
 }

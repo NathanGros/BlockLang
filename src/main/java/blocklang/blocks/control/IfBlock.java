@@ -120,6 +120,7 @@ public class IfBlock extends InstructionBlock {
             nextBlock.drawWithChildren();
     }
 
+    @Override
     public PositionnedBlock selectWithChildren(Vector2 mousePos) {
         Rectangle shape = new Rectangle();
         shape.x(getPosX());
@@ -152,5 +153,46 @@ public class IfBlock extends InstructionBlock {
             }
         }
         return null;
+    }
+
+    @Override
+    public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
+        if (condition.insertWithChildren(selectedBlock, mousePos))
+            return true;
+        if (hasNextBlock()) {
+            if (nextBlock.insertWithChildren(selectedBlock, mousePos))
+                return true;
+        }
+        if (hasInBlock()) {
+            if (inBlock.insertWithChildren(selectedBlock, mousePos))
+                return true;
+        }
+        if (selectedBlock instanceof InstructionBlock selectedInstructionBlock) {
+            // Try to insert in
+            Rectangle insertInShape = new Rectangle();
+            insertInShape.x(getPosX());
+            insertInShape.y(getPosY());
+            insertInShape.width(width);
+            insertInShape.height(height);
+            if (CheckCollisionPointRec(mousePos, insertInShape)) {
+                InstructionBlock oldInBlock = inBlock;
+                inBlock = selectedInstructionBlock;
+                selectedInstructionBlock.appendLastWithChildren(oldInBlock);
+                return true;
+            }
+            // Try to insert next
+            Rectangle insertNextShape = new Rectangle();
+            insertNextShape.x(getPosX());
+            insertNextShape.y(closeY);
+            insertNextShape.width(width);
+            insertNextShape.height(closeHeight);
+            if (CheckCollisionPointRec(mousePos, insertNextShape)) {
+                InstructionBlock oldNextBlock = nextBlock;
+                nextBlock = selectedInstructionBlock;
+                selectedInstructionBlock.appendLastWithChildren(oldNextBlock);
+                return true;
+            }
+        }
+        return false;
     }
 }

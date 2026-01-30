@@ -56,4 +56,6 @@ public abstract class PositionnedBlock {
     }
 
     public abstract PositionnedBlock selectWithChildren(Vector2 mousePos);
+
+    public abstract Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos);
 }

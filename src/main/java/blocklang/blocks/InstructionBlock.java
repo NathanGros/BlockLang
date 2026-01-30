@@ -71,4 +71,34 @@ public abstract class InstructionBlock extends PositionnedBlock {
         }
         return null;
     }
+
+    public void appendLastWithChildren(InstructionBlock oldNextBlock) {
+        if (!hasNextBlock()) {
+            nextBlock = oldNextBlock;
+            return;
+        }
+        nextBlock.appendLastWithChildren(oldNextBlock);
+    }
+
+    @Override
+    public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
+        if (hasNextBlock()) {
+            if (nextBlock.insertWithChildren(selectedBlock, mousePos))
+                return true;
+        }
+        if (selectedBlock instanceof InstructionBlock selectedInstructionBlock) {
+            Rectangle insertShape = new Rectangle();
+            insertShape.x(getPosX());
+            insertShape.y(getPosY());
+            insertShape.width(width);
+            insertShape.height(height);
+            if (CheckCollisionPointRec(mousePos, insertShape)) {
+                InstructionBlock oldNextBlock = nextBlock;
+                nextBlock = selectedInstructionBlock;
+                selectedInstructionBlock.appendLastWithChildren(oldNextBlock);
+                return true;
+            }
+        }
+        return false;
+    }
 }

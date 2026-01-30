@@ -72,6 +72,7 @@ public class Main {
                 }
                 if (moveSelectedBlockMode) {
                     moveSelectedBlockMode = false;
+                    blockView.insertBlockAtPos(selectedBlock, GetScreenToWorld2D(mousePosition, camera));
                     selectedBlock = null;
                 }
             }

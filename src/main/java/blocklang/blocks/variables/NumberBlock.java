@@ -4,7 +4,9 @@ import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
+import com.raylib.Raylib.Vector2;
 
+import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.ValueBlock;
 
 /**
@@ -53,6 +55,11 @@ public class NumberBlock extends ValueBlock {
             return this.value.equals(number.getValue());
         }
         // TODO other valueblocks
+        return false;
+	}
+
+	@Override
+	public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
         return false;
 	}
 }
