@@ -3,6 +3,8 @@ package blocklang;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.raylib.Raylib.Vector2;
+
 import blocklang.blocks.*;
 import blocklang.blocks.control.*;
 import blocklang.blocks.events.*;
@@ -74,5 +76,9 @@ public class BlockView {
         for (PositionnedBlock root: roots) {
             root.drawWithChildren();
         }
+    }
+
+    public PositionnedBlock getSelectedBlock(Vector2 mousePosition) {
+        return null;
     }
 }

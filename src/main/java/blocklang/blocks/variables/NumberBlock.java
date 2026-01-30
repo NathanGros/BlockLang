@@ -40,7 +40,7 @@ public class NumberBlock extends ValueBlock {
         color.g((byte) 255);
         color.b((byte) 255);
         color.a((byte) 255);
-        DrawRectangleRounded(shape, 1.f, 5, color);
+        DrawRectangleRounded(shape, 1.f, 10, color);
 	}
 
 	@Override

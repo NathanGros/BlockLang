@@ -2,6 +2,8 @@ package blocklang;
 
 import static com.raylib.Raylib.*;
 
+import blocklang.blocks.PositionnedBlock;
+
 import static com.raylib.Colors.*;
 
 public class Main {
@@ -14,7 +16,12 @@ public class Main {
         blockView.positionAll();
         blockView.runAll();
 
+        Boolean dragScreenMode = false;
+        PositionnedBlock selectedBlock;
+        Vector2 mousePosition = GetMousePosition();
+
         SetConfigFlags(FLAG_MSAA_4X_HINT);
+        SetConfigFlags(FLAG_WINDOW_RESIZABLE);
         InitWindow(screenWidth, screenHeight, "BlockLang");
 
         Camera2D camera = new Camera2D()
@@ -23,24 +30,48 @@ public class Main {
             .rotation(0.0f)
             .zoom(1.0f);
 
+
         SetTargetFPS(60);
 
         while (!WindowShouldClose()) {
+            if (IsWindowResized()) {
+                screenWidth = GetScreenWidth();
+                screenHeight = GetScreenHeight();
+                camera.offset(new Vector2().x(screenWidth / 2).y(screenHeight / 2));
+            }
+
             // Update
             float dt = GetFrameTime();
             Vector2 cameraPos = camera.offset();
-            float cameraSpeed = 5f;
-            if (IsKeyDown(KEY_LEFT)) {
-                camera.target(Vector2Add(camera.target(), new Vector2().x(-1.f * cameraSpeed * 60.0f * dt).y(0.0f)));
+            Float mouseWheelMovementY = GetMouseWheelMoveV().y();
+            if (mouseWheelMovementY != 0.f) {
+                if (mouseWheelMovementY > 0)
+                    camera.zoom(camera.zoom() * 1.3f);
+                else
+                    camera.zoom(camera.zoom() / 1.3f);
             }
-            if (IsKeyDown(KEY_RIGHT)) {
-                camera.target(Vector2Add(camera.target(), new Vector2().x(cameraSpeed * 60.0f * dt).y(0.0f)));
+            if (camera.zoom() < 0.3f)
+                camera.zoom(0.3f);
+            if (camera.zoom() > 3.f)
+                camera.zoom(3.f);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                selectedBlock = blockView.getSelectedBlock(GetMousePosition());
+                if (selectedBlock == null) {
+                    dragScreenMode = true;
+                    mousePosition = GetMousePosition();
+                }
             }
-            if (IsKeyDown(KEY_UP)) {
-                camera.target(Vector2Add(camera.target(), new Vector2().x(0.0f).y(-1.f * cameraSpeed * 60.0f * dt)));
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                if (dragScreenMode) {
+                    dragScreenMode = false;
+                }
             }
-            if (IsKeyDown(KEY_DOWN)) {
-                camera.target(Vector2Add(camera.target(), new Vector2().x(0.0f).y(cameraSpeed * 60.0f * dt)));
+            if (dragScreenMode) {
+                Vector2 newMousePosition = GetMousePosition();
+                Vector2 oldMouseWorldPosition = GetScreenToWorld2D(mousePosition, camera);
+                Vector2 newMouseWorldPosition = GetScreenToWorld2D(newMousePosition, camera);
+                camera.target(Vector2Add(Vector2Subtract(camera.target(), newMouseWorldPosition), oldMouseWorldPosition));
+                mousePosition = newMousePosition;
             }
 
             // Draw
