@@ -43,4 +43,13 @@ public abstract class PositionnedBlock {
     }
 
     public abstract void draw();
+
+    public Position positionWithChildren(Position pos) {
+        setPos(pos);
+        return new Position(pos);
+    }
+
+    public void drawWithChildren() {
+        this.draw();
+    }
 }

@@ -95,9 +95,10 @@ public class EqualsBlock extends BooleanBlock {
 	}
 
     @Override
-    public void positionWithChildren(Position pos) {
+    public Position positionWithChildren(Position pos) {
         setPos(pos);
         positionValueBlocks();
+        return new Position(pos);
     }
 
     @Override

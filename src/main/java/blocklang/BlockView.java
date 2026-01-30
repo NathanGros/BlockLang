@@ -12,10 +12,16 @@ import blocklang.blocks.operators.*;
  * BlockRunner
  */
 public class BlockView {
-    private List<InstructionBlock> roots;
+    private List<PositionnedBlock> roots;
 
     public BlockView() {
         roots = new ArrayList<>();
+
+        DummyBlock dummyBlock0 = new DummyBlock(-300.f, 200.f);
+        StopBlock stopBlock0 = new StopBlock();
+        dummyBlock0.setNextBlock(stopBlock0);
+        roots.add(dummyBlock0);
+
         StartBlock startBlock = new StartBlock(0.f, 0.f);
         DummyBlock dummyBlock1 = new DummyBlock();
         ForBlock forBlock = new ForBlock();
@@ -46,30 +52,27 @@ public class BlockView {
         roots.add(startBlock);
     }
 
-    public List<InstructionBlock> getRoots() {
+    public List<PositionnedBlock> getRoots() {
         return roots;
     }
 
     public void positionAll() {
-        for (InstructionBlock root: roots) {
-            if (!root.getBlockType().equals(BlockType.START))
-                continue;
+        for (PositionnedBlock root: roots) {
             root.positionWithChildren(root.getPos());
         }
     }
 
     public void runAll() {
         System.out.println("Running...");
-        for (InstructionBlock root: roots) {
-            if (!root.getBlockType().equals(BlockType.START))
-                continue;
-            root.runWithChildren();
+        for (PositionnedBlock root: roots) {
+            if (root instanceof StartBlock start)
+                start.runWithChildren();
         }
     }
 
     public void drawAll() {
-        for (InstructionBlock block: roots) {
-            block.drawWithChildren();
+        for (PositionnedBlock root: roots) {
+            root.drawWithChildren();
         }
     }
 }

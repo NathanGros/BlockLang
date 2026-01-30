@@ -62,12 +62,4 @@ public class BooleanBlock extends PositionnedBlock {
         DrawTriangle(leftTopVertex, leftCenterVertex, leftBottomVertex, color);
         DrawTriangle(rightBottomVertex, rightCenterVertex, rightTopVertex, color);
     }
-
-    public void positionWithChildren(Position pos) {
-        setPos(pos);
-    }
-
-    public void drawWithChildren() {
-        this.draw();
-    }
 }

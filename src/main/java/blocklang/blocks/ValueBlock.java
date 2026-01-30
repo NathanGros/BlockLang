@@ -9,12 +9,4 @@ public abstract class ValueBlock extends PositionnedBlock {
     }
 
     public abstract Boolean equals(ValueBlock value);
-
-    public void positionWithChildren(Position pos) {
-        setPos(pos);
-    }
-
-    public void drawWithChildren() {
-        this.draw();
-    }
 }
