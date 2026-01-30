@@ -18,7 +18,7 @@ import blocklang.blocks.variables.NumberBlock;
 public class EqualsBlock extends BooleanBlock {
     private ValueBlock value1;
     private ValueBlock value2;
-    static Float CENTER_WIDTH = 20.f;
+    private static Float CENTER_WIDTH = 20.f;
 
     public EqualsBlock(Float posX, Float posY) {
         super(posX, posY, 100.f, 40.f);
@@ -103,7 +103,7 @@ public class EqualsBlock extends BooleanBlock {
     @Override
     public void drawWithChildren() {
         draw();
-        value1.draw();
-        value2.draw();
+        value1.drawWithChildren();
+        value2.drawWithChildren();
     }
 }
