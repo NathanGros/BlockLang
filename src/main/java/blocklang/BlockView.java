@@ -83,7 +83,8 @@ public class BlockView {
         for (PositionnedBlock root: roots) {
             newRoots.add(root);
         }
-        for (PositionnedBlock root: roots) {
+        List<PositionnedBlock> reversedRoots = roots.reversed();
+        for (PositionnedBlock root: reversedRoots) {
             PositionnedBlock selectedBlock = root.selectWithChildren(mouseWorldPosition);
             if (selectedBlock != null) {
                 if (selectedBlock == root) {
@@ -101,7 +102,8 @@ public class BlockView {
     }
 
     public void insertBlockAtPos(PositionnedBlock selectedBlock, Vector2 mouseWorldPosition) {
-        for (PositionnedBlock root: roots) {
+        List<PositionnedBlock> reversedRoots = roots.reversed();
+        for (PositionnedBlock root: reversedRoots) {
             if (selectedBlock == root) {
                 continue;
             }
