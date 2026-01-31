@@ -48,23 +48,31 @@ public class ValueSlot extends ValueBlock {
 
 	@Override
 	public void draw() {
+        Rectangle borderShape = new Rectangle();
+        borderShape.x(getPosX());
+        borderShape.y(getPosY());
+        borderShape.width(width);
+        borderShape.height(height);
+        Color borderColor = new Color();
+        borderColor.r((byte) 205);
+        borderColor.g((byte) 205);
+        borderColor.b((byte) 205);
+        borderColor.a((byte) 255);
+
         Rectangle shape = new Rectangle();
-        shape.x(getPosX());
-        shape.y(getPosY());
-        shape.width(width);
-        shape.height(height);
+        shape.x(getPosX() + 1.f);
+        shape.y(getPosY() + 1.f);
+        shape.width(width - 2.f);
+        shape.height(height - 2.f);
         Color color = new Color();
         color.r((byte) 255);
         color.g((byte) 255);
         color.b((byte) 255);
         color.a((byte) 255);
+
+        DrawRectangleRounded(borderShape, 1.f, 10, borderColor);
         DrawRectangleRounded(shape, 1.f, 10, color);
 	}
-
-
-
-
-
 
     @Override
     public Position positionWithChildren(Position pos) {

@@ -1,8 +1,6 @@
 package blocklang.blocks.operators;
 
 import static com.raylib.Raylib.CheckCollisionPointRec;
-import static com.raylib.Raylib.DrawPoly;
-import static com.raylib.Raylib.DrawRectangleRec;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
@@ -72,27 +70,20 @@ public class EqualsBlock extends BooleanBlock {
 
 	@Override
 	public void draw() {
-        Rectangle center = new Rectangle();
-        Float halfHeight = height / 2.f;
-        center.x(getPosX() + halfHeight);
-        center.y(getPosY());
-        center.width(width - height);
-        center.height(height);
-        Vector2 leftCenter = new Vector2();
-        leftCenter.x(getPosX() + halfHeight);
-        leftCenter.y(getPosY() + halfHeight);
-        Vector2 rightCenter = new Vector2();
-        rightCenter.x(getPosX() + width - halfHeight);
-        rightCenter.y(getPosY() + halfHeight);
-        Float radius = halfHeight;
+        Color borderColor = new Color();
+        borderColor.r((byte) 71);
+        borderColor.g((byte) 154);
+        borderColor.b((byte) 71);
+        borderColor.a((byte) 255);
         Color color = new Color();
         color.r((byte) 89);
         color.g((byte) 192);
         color.b((byte) 89);
         color.a((byte) 255);
-        DrawRectangleRec(center, color);
-        DrawPoly(leftCenter, 4, radius, 0.f, color);
-        DrawPoly(rightCenter, 4, radius, 0.f, color);
+        Float borderY = 1.f;
+        Float borderX = borderY * (float) Math.sqrt(2);
+        drawHexagon(getPosX(), getPosY(), width, height, borderColor);
+        drawHexagon(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
 	}
 
     @Override

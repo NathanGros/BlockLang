@@ -1,15 +1,13 @@
 package blocklang.blocks.control;
 
 import static com.raylib.Raylib.CheckCollisionPointRec;
-import static com.raylib.Raylib.DrawRectangleRec;
-import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
-import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
+import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.ValueBlock;
@@ -60,30 +58,39 @@ public class ForBlock extends InstructionBlock {
 
 	@Override
 	public void draw() {
-        Rectangle topShape = new Rectangle();
-        topShape.x(getPosX());
-        topShape.y(getPosY());
-        topShape.width(width);
-        topShape.height(height);
-        Rectangle sideShape = new Rectangle();
-        sideShape.x(getPosX());
-        sideShape.y(getPosY() + height / 2.f);
-        sideShape.width(INDENTATION);
-        sideShape.height(closeY + closeHeight / 2.f - (getPosY() + height / 2.f));
-        Rectangle bottomShape = new Rectangle();
-        bottomShape.x(getPosX());
-        bottomShape.y(closeY);
-        bottomShape.width(width);
-        bottomShape.height(closeHeight);
+        Color borderColor = new Color();
+        borderColor.r((byte) 205);
+        borderColor.g((byte) 137);
+        borderColor.b((byte) 20);
+        borderColor.a((byte) 255);
         Color color = new Color();
         color.r((byte) 255);
         color.g((byte) 171);
         color.b((byte) 25);
         color.a((byte) 255);
-        DrawRectangleRounded(topShape, CORNER_RADIUS / (height / 2.f), 5, color);
-        DrawRectangleRec(sideShape, color);
-        DrawRectangleRounded(bottomShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
-        nbRepetitions.draw();
+        Float border = 1.f;
+        Float roundness = CORNER_RADIUS / (height / 2.f);
+        Float closeRoundness = CORNER_RADIUS / (closeHeight / 2.f);
+        drawRectangle(getPosX(), getPosY(), width, height, roundness, borderColor);
+        drawRectangle(
+            getPosX(),
+            getPosY() + height / 2.f,
+            INDENTATION,
+            closeY + closeHeight / 2.f - (getPosY() + height / 2.f),
+            roundness,
+            borderColor
+        );
+        drawRectangle(getPosX(), closeY, width, closeHeight, closeRoundness, borderColor);
+        drawRectangle(getPosX() + border, getPosY() + border, width - 2.f * border, height - 2.f * border, roundness, color);
+        drawRectangle(
+            getPosX() + border,
+            getPosY() + height / 2.f + border,
+            INDENTATION - 2.f * border,
+            closeY + closeHeight / 2.f - (getPosY() + height / 2.f),
+            roundness,
+            color
+        );
+        drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
 	}
 
     @Override
@@ -117,6 +124,7 @@ public class ForBlock extends InstructionBlock {
     @Override
     public void drawWithChildren() {
         this.draw();
+        nbRepetitions.draw();
         if (hasInBlock())
             inBlock.drawWithChildren();
         if (hasNextBlock())

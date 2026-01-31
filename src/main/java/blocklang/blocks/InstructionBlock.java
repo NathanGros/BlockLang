@@ -1,7 +1,9 @@
 package blocklang.blocks;
 
 import static com.raylib.Raylib.CheckCollisionPointRec;
+import static com.raylib.Raylib.DrawRectangleRounded;
 
+import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
@@ -28,6 +30,15 @@ public abstract class InstructionBlock extends PositionnedBlock {
     }
     public InstructionBlock getNextBlock() {
         return nextBlock;
+    }
+
+    protected void drawRectangle(Float posX, Float posY, Float width, Float height, Float roundness, Color color) {
+        Rectangle shape = new Rectangle();
+        shape.x(posX);
+        shape.y(posY);
+        shape.width(width);
+        shape.height(height);
+        DrawRectangleRounded(shape, roundness, 5, color);
     }
 
     public Boolean hasNextBlock() {

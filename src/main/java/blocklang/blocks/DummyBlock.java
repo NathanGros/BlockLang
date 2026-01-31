@@ -1,9 +1,6 @@
 package blocklang.blocks;
 
-import static com.raylib.Raylib.DrawRectangleRounded;
-
 import com.raylib.Raylib.Color;
-import com.raylib.Raylib.Rectangle;
 
 /**
  * DummyBlock
@@ -18,16 +15,19 @@ public class DummyBlock extends InstructionBlock {
 
 	@Override
 	public void draw() {
-        Rectangle shape = new Rectangle();
-        shape.x(getPosX());
-        shape.y(getPosY());
-        shape.width(width);
-        shape.height(height);
+        Color borderColor = new Color();
+        borderColor.r((byte) 61);
+        borderColor.g((byte) 121);
+        borderColor.b((byte) 205);
+        borderColor.a((byte) 255);
         Color color = new Color();
         color.r((byte) 76);
         color.g((byte) 151);
         color.b((byte) 255);
         color.a((byte) 255);
-        DrawRectangleRounded(shape, CORNER_RADIUS / (height / 2.f), 5, color);
+        Float border = 1.f;
+        Float roundness = CORNER_RADIUS / (height / 2.f);
+        drawRectangle(getPosX(), getPosY(), width, height, roundness, borderColor);
+        drawRectangle(getPosX() + border, getPosY() + border, width - 2.f * border, height - 2.f * border, roundness, color);
 	}
 }
