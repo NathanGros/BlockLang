@@ -24,6 +24,9 @@ public class BlockView {
         dummyBlock0.setNextBlock(stopBlock0);
         roots.add(dummyBlock0);
 
+        AndBlock andBlock = new AndBlock(-300.f, 0.f);
+        roots.add(andBlock);
+
         StartBlock startBlock = new StartBlock(0.f, 0.f);
         DummyBlock dummyBlock1 = new DummyBlock();
         ForBlock forBlock = new ForBlock();
