@@ -11,7 +11,7 @@ import blocklang.blocks.events.*;
 import blocklang.blocks.operators.*;
 
 /**
- * BlockRunner
+ * BlockView
  */
 public class BlockView {
     private List<PositionnedBlock> roots;
@@ -26,6 +26,9 @@ public class BlockView {
 
         AndBlock andBlock = new AndBlock(-300.f, 0.f);
         roots.add(andBlock);
+
+        OrBlock orBlock = new OrBlock(-300.f, 100.f);
+        roots.add(orBlock);
 
         StartBlock startBlock = new StartBlock(0.f, 0.f);
         DummyBlock dummyBlock1 = new DummyBlock();
