@@ -1,28 +1,28 @@
 package blocklang.blocks;
 
 import static com.raylib.Raylib.CheckCollisionPointRec;
-import static com.raylib.Raylib.DrawRectangleRec;
-import static com.raylib.Raylib.DrawTriangle;
+import static com.raylib.Raylib.DrawRectangleRounded;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
 /**
- * BooleanSlot
+ * ValueSlot
  */
-public class BooleanSlot extends BooleanBlock {
-    private BooleanBlock child;
+public class ValueSlot extends ValueBlock {
+    private Float value;
+    private ValueBlock child;
 
-    public BooleanSlot(Float x, Float y) {
+    public ValueSlot(Float x, Float y) {
         super(x, y, BASE_WIDTH, BASE_HEIGHT);
-        child = null;
+        value = 0.f;
     }
-    public BooleanSlot() {
+    public ValueSlot() {
         this(0.f, 0.f);
     }
 
-    public void setChild(BooleanBlock child) {
+    public void setChild(ValueBlock child) {
         this.child = child;
     }
 
@@ -30,49 +30,41 @@ public class BooleanSlot extends BooleanBlock {
         return child != null;
     }
 
+    @Override
+    public Float getFloatValue() {
+        if (hasChild())
+            return child.getFloatValue();
+        return value;
+    }
+    public void setValue(Float value) {
+        this.value = value;
+    }
+
     private void positionChild() {
         child.positionWithChildren(new Position(getPosX(), getPosY()));
         this.height = child.getHeight();
         this.width = child.getWidth();
     }
-    
-    public void draw() {
-        Float halfHeight = height / 2.f;
-        Rectangle center = new Rectangle();
-        center.x(getPosX() + halfHeight);
-        center.y(getPosY());
-        center.width(width - height);
-        center.height(height);
 
-        Vector2 leftTopVertex = new Vector2();
-        leftTopVertex.x(getPosX() + halfHeight);
-        leftTopVertex.y(getPosY());
-        Vector2 leftCenterVertex = new Vector2();
-        leftCenterVertex.x(getPosX());
-        leftCenterVertex.y(getPosY() + halfHeight);
-        Vector2 leftBottomVertex = new Vector2();
-        leftBottomVertex.x(getPosX() + halfHeight);
-        leftBottomVertex.y(getPosY() + height);
-
-        Vector2 rightTopVertex = new Vector2();
-        rightTopVertex.x(getPosX() + width - halfHeight);
-        rightTopVertex.y(getPosY());
-        Vector2 rightCenterVertex = new Vector2();
-        rightCenterVertex.x(getPosX() + width);
-        rightCenterVertex.y(getPosY() + halfHeight);
-        Vector2 rightBottomVertex = new Vector2();
-        rightBottomVertex.x(getPosX() + width - halfHeight);
-        rightBottomVertex.y(getPosY() + height);
-
+	@Override
+	public void draw() {
+        Rectangle shape = new Rectangle();
+        shape.x(getPosX());
+        shape.y(getPosY());
+        shape.width(width);
+        shape.height(height);
         Color color = new Color();
-        color.r((byte) 0);
-        color.g((byte) 0);
-        color.b((byte) 0);
-        color.a((byte) 50);
-        DrawRectangleRec(center, color);
-        DrawTriangle(leftTopVertex, leftCenterVertex, leftBottomVertex, color);
-        DrawTriangle(rightBottomVertex, rightCenterVertex, rightTopVertex, color);
-    }
+        color.r((byte) 255);
+        color.g((byte) 255);
+        color.b((byte) 255);
+        color.a((byte) 255);
+        DrawRectangleRounded(shape, 1.f, 10, color);
+	}
+
+
+
+
+
 
     @Override
     public Position positionWithChildren(Position pos) {
@@ -117,14 +109,14 @@ public class BooleanSlot extends BooleanBlock {
 	public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
         if (hasChild())
             return child.insertWithChildren(selectedBlock, mousePos);
-        if (selectedBlock instanceof BooleanBlock selectedBooleanBlock) {
+        if (selectedBlock instanceof ValueBlock selectedValueBlock) {
             Rectangle shape = new Rectangle();
             shape.x(getPosX());
             shape.y(getPosY());
             shape.width(width);
             shape.height(height);
             if (CheckCollisionPointRec(mousePos, shape)) {
-                child = selectedBooleanBlock;
+                child = selectedValueBlock;
                 return true;
             }
             return false;
@@ -132,10 +124,16 @@ public class BooleanSlot extends BooleanBlock {
         return false;
 	}
 
-    @Override
-    public Boolean isTrue() {
-        if (hasChild())
-            return child.isTrue();
+	@Override
+	public Boolean equals(ValueBlock otherValue) {
+        if (this == otherValue)
+            return true;
+        if (otherValue == null)
+            return false;
+        if (otherValue instanceof ValueSlot valueSlot) {
+            return this.value.equals(valueSlot.getFloatValue());
+        }
+        // TODO other valueblocks
         return false;
-    }
+	}
 }

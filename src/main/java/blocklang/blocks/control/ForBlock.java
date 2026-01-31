@@ -12,13 +12,14 @@ import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
-import blocklang.blocks.variables.NumberBlock;
+import blocklang.blocks.ValueBlock;
+import blocklang.blocks.ValueSlot;
 
 /**
  * ForBlock
  */
 public class ForBlock extends InstructionBlock {
-    private NumberBlock nbRepetitions;
+    private ValueBlock nbRepetitions;
     private InstructionBlock inBlock;
     private Float closeHeight;
     private Float closeY;
@@ -29,14 +30,14 @@ public class ForBlock extends InstructionBlock {
     public ForBlock(Float x, Float y) {
         super(BlockType.FOR, x, y, 100.f, 40.f);
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
-        nbRepetitions = new NumberBlock();
+        nbRepetitions = new ValueSlot();
     }
     public ForBlock() {
         this(0.f, 0.f);
     }
 
     public void setNbRepetitions(Integer nbRepetitions) {
-        NumberBlock n = new NumberBlock();
+        ValueSlot n = new ValueSlot();
         n.setValue(nbRepetitions.floatValue());
         this.nbRepetitions = n;
     }
@@ -106,7 +107,7 @@ public class ForBlock extends InstructionBlock {
     public void runWithChildren() {
         System.out.println(type);
         if (hasInBlock()) {
-            for (int i = 0; i < nbRepetitions.getValue(); i++)
+            for (int i = 0; i < nbRepetitions.getFloatValue(); i++)
                 inBlock.runWithChildren();
         }
         if (hasNextBlock())

@@ -12,7 +12,7 @@ import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.ValueBlock;
-import blocklang.blocks.variables.NumberBlock;
+import blocklang.blocks.ValueSlot;
 
 /**
  * CompareBlock
@@ -24,8 +24,8 @@ public class EqualsBlock extends BooleanBlock {
 
     public EqualsBlock(Float posX, Float posY) {
         super(posX, posY, 100.f, 40.f);
-        value1 = new NumberBlock();
-        value2 = new NumberBlock();
+        value1 = new ValueSlot();
+        value2 = new ValueSlot();
     }
     public EqualsBlock() {
         this(0.f, 0.f);
@@ -41,14 +41,14 @@ public class EqualsBlock extends BooleanBlock {
         positionValueBlocks();
     }
     public void setValue1(Integer value) {
-        NumberBlock number = new NumberBlock();
-        number.setValue(value.floatValue());
-        this.value1 = number;
+        ValueSlot valueSlot = new ValueSlot();
+        valueSlot.setValue(value.floatValue());
+        this.value1 = valueSlot;
     }
     public void setValue2(Integer value) {
-        NumberBlock number = new NumberBlock();
-        number.setValue(value.floatValue());
-        this.value2 = number;
+        ValueSlot valueSlot = new ValueSlot();
+        valueSlot.setValue(value.floatValue());
+        this.value2 = valueSlot;
     }
 
     private void positionValueBlocks() {
