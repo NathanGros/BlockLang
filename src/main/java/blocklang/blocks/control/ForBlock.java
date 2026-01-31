@@ -10,14 +10,13 @@ import blocklang.blocks.BlockType;
 import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
-import blocklang.blocks.ValueBlock;
 import blocklang.blocks.ValueSlot;
 
 /**
  * ForBlock
  */
 public class ForBlock extends InstructionBlock {
-    private ValueBlock nbRepetitions;
+    private ValueSlot nbRepetitions;
     private InstructionBlock inBlock;
     private Float closeHeight;
     private Float closeY;
@@ -34,10 +33,8 @@ public class ForBlock extends InstructionBlock {
         this(0.f, 0.f);
     }
 
-    public void setNbRepetitions(Integer nbRepetitions) {
-        ValueSlot n = new ValueSlot();
-        n.setValue(nbRepetitions.floatValue());
-        this.nbRepetitions = n;
+    public void setNbRepetitions(Integer nbReps) {
+        nbRepetitions.setValue(nbReps.floatValue());
     }
     public void setInBlock(InstructionBlock inBlock) {
         this.inBlock = inBlock;
@@ -124,7 +121,7 @@ public class ForBlock extends InstructionBlock {
     @Override
     public void drawWithChildren() {
         this.draw();
-        nbRepetitions.draw();
+        nbRepetitions.drawWithChildren();
         if (hasInBlock())
             inBlock.drawWithChildren();
         if (hasNextBlock())
@@ -141,8 +138,6 @@ public class ForBlock extends InstructionBlock {
         if (CheckCollisionPointRec(mousePos, shape)) {
             PositionnedBlock selected = nbRepetitions.selectWithChildren(mousePos);
             if (selected != null) {
-                if (selected == nbRepetitions)
-                    nbRepetitions = null;
                 return selected;
             }
             return this;

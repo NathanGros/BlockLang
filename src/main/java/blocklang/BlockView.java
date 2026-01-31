@@ -27,8 +27,8 @@ public class BlockView {
         AndBlock andBlock = new AndBlock(-300.f, 0.f);
         roots.add(andBlock);
 
-        OrBlock orBlock = new OrBlock(-300.f, 100.f);
-        roots.add(orBlock);
+        AddBlock addBlock = new AddBlock(-300.f, 100.f);
+        roots.add(addBlock);
 
         StartBlock startBlock = new StartBlock(0.f, 0.f);
         DummyBlock dummyBlock1 = new DummyBlock();

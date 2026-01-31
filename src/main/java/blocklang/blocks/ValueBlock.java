@@ -1,5 +1,10 @@
 package blocklang.blocks;
 
+import static com.raylib.Raylib.DrawRectangleRounded;
+
+import com.raylib.Raylib.Color;
+import com.raylib.Raylib.Rectangle;
+
 /**
  * ValueBlock
  */
@@ -17,7 +22,22 @@ public abstract class ValueBlock extends PositionnedBlock {
         this(0.f, 0.f);
     }
 
-    public abstract Boolean equals(ValueBlock value);
+    protected void drawOval(Float posX, Float posY, Float width, Float height, Color color) {
+        Rectangle shape = new Rectangle();
+        shape.x(posX);
+        shape.y(posY);
+        shape.width(width);
+        shape.height(height);
+        DrawRectangleRounded(shape, 1.f, 10, color);
+    }
 
     public abstract Float getFloatValue();
+
+	public Boolean equals(ValueBlock otherValue) {
+        if (this == otherValue)
+            return true;
+        if (otherValue == null)
+            return false;
+        return this.getFloatValue().equals(otherValue.getFloatValue());
+	}
 }

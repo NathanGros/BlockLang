@@ -105,8 +105,8 @@ public class ValueSlot extends ValueBlock {
                     child = null;
                     width = BASE_WIDTH;
                     height = BASE_HEIGHT;
-                    return selected;
                 }
+                return selected;
             }
             return null;
         }
@@ -129,19 +129,6 @@ public class ValueSlot extends ValueBlock {
             }
             return false;
         }
-        return false;
-	}
-
-	@Override
-	public Boolean equals(ValueBlock otherValue) {
-        if (this == otherValue)
-            return true;
-        if (otherValue == null)
-            return false;
-        if (otherValue instanceof ValueSlot valueSlot) {
-            return this.value.equals(valueSlot.getFloatValue());
-        }
-        // TODO other valueblocks
         return false;
 	}
 }

@@ -6,25 +6,25 @@ import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
-import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
+import blocklang.blocks.ValueBlock;
 import blocklang.blocks.ValueSlot;
 
 /**
- * EqualsBlock
+ * AddBlock
  */
-public class EqualsBlock extends BooleanBlock {
-    private ValueSlot value1;
-    private ValueSlot value2;
+public class AddBlock extends ValueBlock {
+    private ValueBlock value1;
+    private ValueBlock value2;
     private static Float CENTER_WIDTH = 20.f;
 
-    public EqualsBlock(Float posX, Float posY) {
+    public AddBlock(Float posX, Float posY) {
         super(posX, posY, BASE_WIDTH, BASE_HEIGHT);
         value1 = new ValueSlot();
         value2 = new ValueSlot();
     }
-    public EqualsBlock() {
+    public AddBlock() {
         this(0.f, 0.f);
     }
 
@@ -60,19 +60,19 @@ public class EqualsBlock extends BooleanBlock {
         Float margin = 3.f;
         this.height = 2.f * margin + valuesHeight;
         value1.positionWithChildren(new Position(
-            getPosX() + height / 4.f + margin,
+            getPosX() + margin,
             getPosY() + margin + (valuesHeight - value1.getHeight()) / 2.f
         ));
         value2.positionWithChildren(new Position(
             value1.getPosX() + value1.getWidth() + CENTER_WIDTH + 2.f * margin,
             getPosY() + margin + (valuesHeight - value2.getHeight()) / 2.f
         ));
-        this.width = CENTER_WIDTH + 4.f * margin + height / 2.f + value1.getWidth() + value2.getWidth();
+        this.width = CENTER_WIDTH + 4.f * margin + value1.getWidth() + value2.getWidth();
     }
 
 	@Override
-	public Boolean isTrue() {
-        return value1.equals(value2);
+	public Float getFloatValue() {
+        return value1.getFloatValue() + value2.getFloatValue();
 	}
 
 	@Override
@@ -89,8 +89,8 @@ public class EqualsBlock extends BooleanBlock {
         color.a((byte) 255);
         Float borderY = 1.f;
         Float borderX = borderY * (float) Math.sqrt(2);
-        drawHexagon(getPosX(), getPosY(), width, height, borderColor);
-        drawHexagon(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
+        drawOval(getPosX(), getPosY(), width, height, borderColor);
+        drawOval(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
 	}
 
     @Override
