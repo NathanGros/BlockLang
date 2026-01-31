@@ -13,12 +13,13 @@ import blocklang.blocks.BlockType;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.BooleanBlock;
+import blocklang.blocks.BooleanSlot;
 
 /**
  * IfElseBlock
  */
 public class IfElseBlock extends InstructionBlock {
-    private BooleanBlock condition;
+    private BooleanSlot conditionSlot;
     private InstructionBlock inTrueBlock;
     private InstructionBlock inFalseBlock;
     private Float middleHeight;
@@ -33,7 +34,7 @@ public class IfElseBlock extends InstructionBlock {
         super(BlockType.IF_ELSE, x, y, 100.f, 50.f);
         middleHeight = BASE_HEIGHT * 2.f / 3.f;
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
-        condition = new BooleanBlock();
+        conditionSlot = new BooleanSlot();
     }
     public IfElseBlock() {
         this(0.f, 0.f);
@@ -43,7 +44,7 @@ public class IfElseBlock extends InstructionBlock {
         this.closeY = closeY;
     }
     public void setConditionBlock(BooleanBlock condition) {
-        this.condition = condition;
+        this.conditionSlot.setChild(condition);
     }
     public void setInTrueBlock(InstructionBlock inTrueBlock) {
         this.inTrueBlock = inTrueBlock;
@@ -60,9 +61,9 @@ public class IfElseBlock extends InstructionBlock {
 
     private void positionCondition() {
         Float margin = 3.f;
-        condition.positionWithChildren(new Position(getPosX() + MARGIN_LEFT + margin, getPosY() + margin));
-        this.height = 2.f * margin + condition.getHeight();
-        this.width = MARGIN_LEFT + 2.f * margin + condition.getWidth() + MARGIN_RIGHT;
+        conditionSlot.positionWithChildren(new Position(getPosX() + MARGIN_LEFT + margin, getPosY() + margin));
+        this.height = 2.f * margin + conditionSlot.getHeight();
+        this.width = MARGIN_LEFT + 2.f * margin + conditionSlot.getWidth() + MARGIN_RIGHT;
     }
     public Boolean hasInTrueBlock() {
         return inTrueBlock != null;
@@ -102,7 +103,6 @@ public class IfElseBlock extends InstructionBlock {
         DrawRectangleRec(sideShape, color);
         DrawRectangleRounded(middleShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
         DrawRectangleRounded(bottomShape, CORNER_RADIUS / (closeHeight / 2.f), 5, color);
-        condition.draw();
 	}
 
     @Override
@@ -130,7 +130,7 @@ public class IfElseBlock extends InstructionBlock {
     @Override
     public void runWithChildren() {
         System.out.println(type);
-        if (condition.isTrue()) {
+        if (conditionSlot.isTrue()) {
             if (hasInTrueBlock())
                 inTrueBlock.runWithChildren();
         } else {
@@ -144,6 +144,7 @@ public class IfElseBlock extends InstructionBlock {
     @Override
     public void drawWithChildren() {
         this.draw();
+        conditionSlot.drawWithChildren();
         if (hasInTrueBlock())
             inTrueBlock.drawWithChildren();
         if (hasInFalseBlock())
@@ -160,10 +161,10 @@ public class IfElseBlock extends InstructionBlock {
         shape.width(width);
         shape.height(height);
         if (CheckCollisionPointRec(mousePos, shape)) {
-            PositionnedBlock selected = condition.selectWithChildren(mousePos);
+            PositionnedBlock selected = conditionSlot.selectWithChildren(mousePos);
             if (selected != null) {
-                if (selected == condition)
-                    condition = new BooleanBlock();
+                if (selected == conditionSlot)
+                    conditionSlot = new BooleanSlot();
                 return selected;
             }
             return this;
@@ -197,7 +198,7 @@ public class IfElseBlock extends InstructionBlock {
 
     @Override
     public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
-        if (condition.insertWithChildren(selectedBlock, mousePos))
+        if (conditionSlot.insertWithChildren(selectedBlock, mousePos))
             return true;
         if (hasNextBlock()) {
             if (nextBlock.insertWithChildren(selectedBlock, mousePos))

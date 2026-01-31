@@ -11,6 +11,7 @@ import com.raylib.Raylib.Vector2;
 import blocklang.blocks.InstructionBlock;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.BooleanBlock;
+import blocklang.blocks.BooleanSlot;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 
@@ -18,7 +19,7 @@ import blocklang.blocks.PositionnedBlock;
  * WhileBlock
  */
 public class WhileBlock extends InstructionBlock {
-    private BooleanBlock condition;
+    private BooleanSlot conditionSlot;
     private InstructionBlock inBlock;
     private Float closeHeight;
     private Float closeY;
@@ -29,14 +30,14 @@ public class WhileBlock extends InstructionBlock {
     public WhileBlock(Float x, Float y) {
         super(BlockType.WHILE, x, y, 100.f, 50.f);
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
-        condition = new BooleanBlock();
+        conditionSlot = new BooleanSlot();
     }
     public WhileBlock() {
         this(0.f, 0.f);
     }
 
     public void setConditionBlock(BooleanBlock condition) {
-        this.condition = condition;
+        this.conditionSlot.setChild(condition);
     }
     public void setInBlock(InstructionBlock inBlock) {
         this.inBlock = inBlock;
@@ -47,15 +48,12 @@ public class WhileBlock extends InstructionBlock {
 
     private void positionCondition() {
         Float margin = 3.f;
-        condition.positionWithChildren(new Position(this.getPosX() + MARGIN_LEFT + margin, this.getPosY() + margin));
-        this.height = 2.f * margin + condition.getHeight();
-        this.width = MARGIN_LEFT + 2.f * margin + condition.getWidth() + MARGIN_RIGHT;
+        conditionSlot.positionWithChildren(new Position(this.getPosX() + MARGIN_LEFT + margin, this.getPosY() + margin));
+        this.height = 2.f * margin + conditionSlot.getHeight();
+        this.width = MARGIN_LEFT + 2.f * margin + conditionSlot.getWidth() + MARGIN_RIGHT;
     }
     public Boolean hasInBlock() {
         return inBlock != null;
-    }
-    public Boolean hasCondition() {
-        return condition != null;
     }
 
 	@Override
@@ -88,8 +86,7 @@ public class WhileBlock extends InstructionBlock {
     @Override
     public Position positionWithChildren(Position pos) {
         setPos(pos);
-        if (hasCondition())
-            positionCondition();
+        positionCondition();
         Position inPos = new Position(this.getPosX() + INDENTATION, this.getPosY() + this.height);
         Position nextPos = new Position(inPos.getPosX(), inPos.getPosY() + HOLE_HEIGHT);
         if (hasInBlock()) {
@@ -107,7 +104,7 @@ public class WhileBlock extends InstructionBlock {
     public void runWithChildren() {
         System.out.println(type);
         if (hasInBlock()) {
-            while (condition.isTrue())
+            while (conditionSlot.isTrue())
                 inBlock.runWithChildren();
         }
         if (hasNextBlock())
@@ -117,7 +114,7 @@ public class WhileBlock extends InstructionBlock {
     @Override
     public void drawWithChildren() {
         this.draw();
-        condition.drawWithChildren();
+        conditionSlot.drawWithChildren();
         if (hasInBlock())
             inBlock.drawWithChildren();
         if (hasNextBlock())
@@ -132,10 +129,10 @@ public class WhileBlock extends InstructionBlock {
         shape.width(width);
         shape.height(height);
         if (CheckCollisionPointRec(mousePos, shape)) {
-            PositionnedBlock selected = condition.selectWithChildren(mousePos);
+            PositionnedBlock selected = conditionSlot.selectWithChildren(mousePos);
             if (selected != null) {
-                if (selected == condition)
-                    condition = new BooleanBlock();
+                if (selected == conditionSlot)
+                    conditionSlot = new BooleanSlot();
                 return selected;
             }
             return this;
@@ -161,7 +158,7 @@ public class WhileBlock extends InstructionBlock {
 
     @Override
     public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
-        if (condition.insertWithChildren(selectedBlock, mousePos))
+        if (conditionSlot.insertWithChildren(selectedBlock, mousePos))
             return true;
         if (hasNextBlock()) {
             if (nextBlock.insertWithChildren(selectedBlock, mousePos))
