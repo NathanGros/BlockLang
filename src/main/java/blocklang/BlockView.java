@@ -91,20 +91,17 @@ public class BlockView {
         for (PositionnedBlock root: roots) {
             newRoots.add(root);
         }
-        List<PositionnedBlock> reversedRoots = roots.reversed();
+        List<PositionnedBlock> reversedRoots = roots.reversed(); // Search in reverse order to select blocks on "top" first
         for (PositionnedBlock root: reversedRoots) {
             PositionnedBlock selectedBlock = root.selectWithChildren(mouseWorldPosition);
-            if (selectedBlock != null) {
-                if (selectedBlock == root) {
-                    newRoots.remove(root);
-                    newRoots.add(root);
-                } else {
-                    newRoots.add(selectedBlock);
-                }
-                roots = newRoots;
-                positionAll();
-                return selectedBlock;
-            }
+            if (selectedBlock == null)
+                continue;
+            if (selectedBlock == root) // Don't add twice
+                newRoots.remove(root);
+            newRoots.add(selectedBlock); // Put the selected block last (on "top")
+            roots = newRoots;
+            positionAll();
+            return selectedBlock;
         }
         return null;
     }
@@ -112,13 +109,13 @@ public class BlockView {
     public void insertBlockAtPos(PositionnedBlock selectedBlock, Vector2 mouseWorldPosition) {
         List<PositionnedBlock> reversedRoots = roots.reversed();
         for (PositionnedBlock root: reversedRoots) {
-            if (selectedBlock == root) {
+            if (selectedBlock == root) { // Dont insert in self
                 continue;
             }
             Boolean inserted = root.insertWithChildren(selectedBlock, mouseWorldPosition);
             if (inserted) {
                 roots.remove(selectedBlock);
-                positionAll();
+                root.positionWithChildren(root.getPos());
                 return;
             }
         }
