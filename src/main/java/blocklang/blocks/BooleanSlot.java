@@ -105,8 +105,8 @@ public class BooleanSlot extends BooleanBlock {
                     child = null;
                     width = BASE_WIDTH;
                     height = BASE_HEIGHT;
-                    return selected;
                 }
+                return selected;
             }
             return null;
         }

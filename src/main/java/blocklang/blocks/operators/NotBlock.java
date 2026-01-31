@@ -9,25 +9,22 @@ import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
 import blocklang.blocks.BooleanBlock;
+import blocklang.blocks.BooleanSlot;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
-import blocklang.blocks.ValueBlock;
-import blocklang.blocks.ValueSlot;
 
 /**
- * EqualsBlock
+ * NotBlock
  */
-public class EqualsBlock extends BooleanBlock {
-    private ValueBlock value1;
-    private ValueBlock value2;
-    private static Float CENTER_WIDTH = 20.f;
+public class NotBlock extends BooleanBlock {
+    private BooleanSlot booleanSlot;
+    private static Float LEFT_MARGIN = 40.f;
 
-    public EqualsBlock(Float posX, Float posY) {
+    public NotBlock(Float posX, Float posY) {
         super(posX, posY, BASE_WIDTH, BASE_HEIGHT);
-        value1 = new ValueSlot();
-        value2 = new ValueSlot();
+        booleanSlot = new BooleanSlot();
     }
-    public EqualsBlock() {
+    public NotBlock() {
         this(0.f, 0.f);
     }
 
@@ -39,35 +36,21 @@ public class EqualsBlock extends BooleanBlock {
     public void setPosY(Float posY) {
         super.setPosY(posY);
     }
-    public void setValue1(Integer value) {
-        ValueSlot valueSlot = new ValueSlot();
-        valueSlot.setValue(value.floatValue());
-        this.value1 = valueSlot;
-    }
-    public void setValue2(Integer value) {
-        ValueSlot valueSlot = new ValueSlot();
-        valueSlot.setValue(value.floatValue());
-        this.value2 = valueSlot;
+    public void setBooleanBlock(BooleanBlock booleanBlock) {
+        this.booleanSlot.setChild(booleanBlock);
     }
 
-    private void positionValueBlocks() {
-        Float margin = 3.f;
-        Float valuesHeight = Math.max(value1.getHeight(), value2.getHeight());
-        this.height = 2.f * margin + valuesHeight;
-        this.width = CENTER_WIDTH + 4.f * margin + height + value1.getWidth() + value2.getWidth();
-        value1.setPos(new Position(
-            getPosX() + height / 2.f + margin,
-            getPosY() + margin + (valuesHeight - value1.getHeight()) / 2.f
-        ));
-        value2.setPos(new Position(
-            value1.getPosX() + value1.getWidth() + CENTER_WIDTH + 2.f * margin,
-            getPosY() + margin + (valuesHeight - value2.getHeight()) / 2.f
-        ));
+    private void positionBooleanSlot() {
+        Float marginY = 3.f;
+        Float marginX = marginY * (float) Math.sqrt(2);
+        booleanSlot.positionWithChildren(new Position(getPosX() + marginX + LEFT_MARGIN, getPosY() + marginY));
+        this.height = 2.f * marginY + booleanSlot.getHeight();
+        this.width = LEFT_MARGIN + 2.f * marginX + booleanSlot.getWidth();
     }
 
 	@Override
 	public Boolean isTrue() {
-        return value1.equals(value2);
+        return booleanSlot.isTrue();
 	}
 
 	@Override
@@ -98,15 +81,14 @@ public class EqualsBlock extends BooleanBlock {
     @Override
     public Position positionWithChildren(Position pos) {
         setPos(pos);
-        positionValueBlocks();
+        positionBooleanSlot();
         return new Position(pos);
     }
 
     @Override
     public void drawWithChildren() {
         draw();
-        value1.drawWithChildren();
-        value2.drawWithChildren();
+        booleanSlot.drawWithChildren();
     }
 
     public PositionnedBlock selectWithChildren(Vector2 mousePos) {
@@ -116,17 +98,9 @@ public class EqualsBlock extends BooleanBlock {
         shape.width(width);
         shape.height(height);
         if (CheckCollisionPointRec(mousePos, shape)) {
-            PositionnedBlock selected1 = value1.selectWithChildren(mousePos);
-            if (selected1 != null) {
-                if (selected1 == value1)
-                    value1 = null;
-                return selected1;
-            }
-            PositionnedBlock selected2 = value2.selectWithChildren(mousePos);
-            if (selected2 != null) {
-                if (selected2 == value2)
-                    value2 = null;
-                return selected2;
+            PositionnedBlock selected = booleanSlot.selectWithChildren(mousePos);
+            if (selected != null) {
+                return selected;
             }
             return this;
         }
@@ -135,9 +109,7 @@ public class EqualsBlock extends BooleanBlock {
 
     @Override
     public Boolean insertWithChildren(PositionnedBlock selectedBlock, Vector2 mousePos) {
-        if (value1.insertWithChildren(selectedBlock, mousePos))
-            return true;
-        if (value2.insertWithChildren(selectedBlock, mousePos))
+        if (booleanSlot.insertWithChildren(selectedBlock, mousePos))
             return true;
         return false;
     }

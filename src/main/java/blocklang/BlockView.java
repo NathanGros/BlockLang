@@ -30,7 +30,8 @@ public class BlockView {
         DummyBlock dummyBlock2 = new DummyBlock();
         IfBlock ifBlock1 = new IfBlock();
         DummyBlock dummyBlock3 = new DummyBlock();
-        EqualsBlock equalsBlock1 = new EqualsBlock();
+        EqualsBlock equalsBlock = new EqualsBlock();
+        NotBlock notBlock = new NotBlock();
         WhileBlock whileBlock1 = new WhileBlock();
         DummyBlock dummyBlock4 = new DummyBlock();
         IfElseBlock ifElseBlock = new IfElseBlock();
@@ -42,13 +43,14 @@ public class BlockView {
         forBlock.setNbRepetitions(3);
         forBlock.setInBlock(dummyBlock2);
         dummyBlock2.setNextBlock(ifBlock1);
-        equalsBlock1.setValue1(1);
-        equalsBlock1.setValue2(1);
-        ifBlock1.setConditionBlock(equalsBlock1);
+        equalsBlock.setValue1(1);
+        equalsBlock.setValue2(1);
+        ifBlock1.setConditionBlock(equalsBlock);
         ifBlock1.setInBlock(dummyBlock3);
         forBlock.setNextBlock(whileBlock1);
         whileBlock1.setInBlock(dummyBlock4);
         whileBlock1.setNextBlock(ifElseBlock);
+        ifElseBlock.setConditionBlock(notBlock);
         ifElseBlock.setInTrueBlock(dummyBlock5);
         ifElseBlock.setNextBlock(stopBlock);
         roots.add(startBlock);

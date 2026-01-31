@@ -131,8 +131,6 @@ public class WhileBlock extends InstructionBlock {
         if (CheckCollisionPointRec(mousePos, shape)) {
             PositionnedBlock selected = conditionSlot.selectWithChildren(mousePos);
             if (selected != null) {
-                if (selected == conditionSlot)
-                    conditionSlot = new BooleanSlot();
                 return selected;
             }
             return this;
