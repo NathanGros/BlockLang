@@ -93,7 +93,7 @@ public class WhileBlock extends InstructionBlock {
             color
         );
         drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
-        float fontMarginX = 0.f;
+        float fontMarginX = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
         DrawTextEx(FontUtil.getFont(), "While", textPos, FontUtil.getWorldFontSize(), 0, WHITE);

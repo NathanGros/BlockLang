@@ -112,11 +112,11 @@ public class IfElseBlock extends InstructionBlock {
         );
         drawRectangle(getPosX() + border, middleY + border, width - 2.f * border, middleHeight - 2.f * border, middleRoundness, color);
         drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
-        float text1MarginX = 0.f;
+        float text1MarginX = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         float text1MarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         Vector2 text1Pos = Vector2Zero().x(getPosX() + text1MarginX).y(getPosY() + text1MarginY);
         DrawTextEx(FontUtil.getFont(), "If", text1Pos, FontUtil.getWorldFontSize(), 0, WHITE);
-        float text2MarginX = 0.f;
+        float text2MarginX = (middleHeight - FontUtil.getWorldFontSize()) / 2.f;
         float text2MarginY = (middleHeight - FontUtil.getWorldFontSize()) / 2.f;
         Vector2 text2Pos = Vector2Zero().x(getPosX() + text2MarginX).y(middleY + text2MarginY);
         DrawTextEx(FontUtil.getFont(), "Else", text2Pos, FontUtil.getWorldFontSize(), 0, WHITE);

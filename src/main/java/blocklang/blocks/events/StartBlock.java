@@ -38,7 +38,7 @@ public class StartBlock extends InstructionBlock {
         Float roundness = CORNER_RADIUS / (height / 2.f);
         drawRectangle(getPosX(), getPosY(), width, height, roundness, borderColor);
         drawRectangle(getPosX() + border, getPosY() + border, width - 2.f * border, height - 2.f * border, roundness, color);
-        float fontMarginX = 0.f;
+        float fontMarginX = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
         DrawTextEx(FontUtil.getFont(), "Start", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
