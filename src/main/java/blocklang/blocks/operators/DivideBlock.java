@@ -95,7 +95,7 @@ public class DivideBlock extends ValueBlock {
         Float borderX = borderY * (float) Math.sqrt(2);
         drawOval(getPosX(), getPosY(), width, height, borderColor);
         drawOval(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
-        float fontMarginX = getWidth() / 2.f;
+        float fontMarginX = value1.getPosX() - getPosX() + value1.getWidth() + CENTER_WIDTH / 2.f;
         float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
         Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
         DrawTextEx(FontUtil.getFont(), "/", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
