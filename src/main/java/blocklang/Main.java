@@ -2,6 +2,8 @@ package blocklang;
 
 import static com.raylib.Raylib.*;
 
+import org.bytedeco.javacpp.IntPointer;
+
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 
@@ -30,12 +32,24 @@ public class Main {
             .offset(new Vector2().x(screenWidth / 2).y(screenHeight / 2))
             .target(Vector2Zero())
             .rotation(0.0f)
-            .zoom(1.0f);
-
+            .zoom(2.0f);
 
         SetTargetFPS(60);
 
+        // Font
+        FontUtil.setWantedWorldFontSize(15.f);
+        FontUtil.refreshFont(camera);
+        boolean shouldUpdateFont = false;
+
+        float timerFontReload = 1.f;
         while (!WindowShouldClose()) {
+            timerFontReload += GetFrameTime();
+            if (shouldUpdateFont && timerFontReload > 3.f) {
+                FontUtil.refreshFont(camera);
+                timerFontReload = 0.f;
+                shouldUpdateFont = false;
+            }
+
             if (IsWindowResized()) {
                 screenWidth = GetScreenWidth();
                 screenHeight = GetScreenHeight();
@@ -47,10 +61,13 @@ public class Main {
             Vector2 cameraPos = camera.offset();
             Float mouseWheelMovementY = GetMouseWheelMoveV().y();
             if (mouseWheelMovementY != 0.f) {
-                if (mouseWheelMovementY > 0)
+                if (mouseWheelMovementY > 0) {
                     camera.zoom(camera.zoom() * 1.3f);
-                else
+                } else {
                     camera.zoom(camera.zoom() / 1.3f);
+                }
+                timerFontReload = 0.f;
+                shouldUpdateFont = true;
             }
             if (camera.zoom() < 0.3f)
                 camera.zoom(0.3f);
@@ -108,6 +125,7 @@ public class Main {
             EndDrawing();
         }
         // De-Initialization
+        UnloadFont(FontUtil.getFont());
         CloseWindow();
     }
 }

@@ -1,6 +1,13 @@
 package blocklang.blocks;
 
+import static com.raylib.Colors.WHITE;
+import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.Vector2Zero;
+
 import com.raylib.Raylib.Color;
+import com.raylib.Raylib.Vector2;
+
+import blocklang.FontUtil;
 
 /**
  * DummyBlock
@@ -29,5 +36,9 @@ public class DummyBlock extends InstructionBlock {
         Float roundness = CORNER_RADIUS / (height / 2.f);
         drawRectangle(getPosX(), getPosY(), width, height, roundness, borderColor);
         drawRectangle(getPosX() + border, getPosY() + border, width - 2.f * border, height - 2.f * border, roundness, color);
+        float fontMarginX = 0.f;
+        float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
+        Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
+        DrawTextEx(FontUtil.getFont(), "Dummy", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
 	}
 }

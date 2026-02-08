@@ -1,11 +1,15 @@
 package blocklang.blocks.operators;
 
+import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
+import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
+import blocklang.FontUtil;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 import blocklang.blocks.ValueBlock;
@@ -91,6 +95,10 @@ public class AddBlock extends ValueBlock {
         Float borderX = borderY * (float) Math.sqrt(2);
         drawOval(getPosX(), getPosY(), width, height, borderColor);
         drawOval(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
+        float fontMarginX = getWidth() / 2.f;
+        float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
+        Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
+        DrawTextEx(FontUtil.getFont(), "+", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
 	}
 
     @Override

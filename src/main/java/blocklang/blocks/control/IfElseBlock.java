@@ -1,11 +1,15 @@
 package blocklang.blocks.control;
 
+import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
+import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
+import blocklang.FontUtil;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.BooleanBlock;
 import blocklang.blocks.BooleanSlot;
@@ -30,7 +34,7 @@ public class IfElseBlock extends InstructionBlock {
 
     public IfElseBlock(Float x, Float y) {
         super(BlockType.IF_ELSE, x, y, 100.f, 50.f);
-        middleHeight = BASE_HEIGHT * 2.f / 3.f;
+        middleHeight = BASE_HEIGHT;
         closeHeight = BASE_HEIGHT * 2.f / 3.f;
         conditionSlot = new BooleanSlot();
     }
@@ -108,6 +112,14 @@ public class IfElseBlock extends InstructionBlock {
         );
         drawRectangle(getPosX() + border, middleY + border, width - 2.f * border, middleHeight - 2.f * border, middleRoundness, color);
         drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
+        float text1MarginX = 0.f;
+        float text1MarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
+        Vector2 text1Pos = Vector2Zero().x(getPosX() + text1MarginX).y(getPosY() + text1MarginY);
+        DrawTextEx(FontUtil.getFont(), "If", text1Pos, FontUtil.getWorldFontSize(), 0, WHITE);
+        float text2MarginX = 0.f;
+        float text2MarginY = (middleHeight - FontUtil.getWorldFontSize()) / 2.f;
+        Vector2 text2Pos = Vector2Zero().x(getPosX() + text2MarginX).y(middleY + text2MarginY);
+        DrawTextEx(FontUtil.getFont(), "Else", text2Pos, FontUtil.getWorldFontSize(), 0, WHITE);
 	}
 
     @Override
