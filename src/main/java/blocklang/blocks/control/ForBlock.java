@@ -3,6 +3,7 @@ package blocklang.blocks.control;
 import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
@@ -24,6 +25,7 @@ public class ForBlock extends InstructionBlock {
     private InstructionBlock inBlock;
     private Float closeHeight;
     private Float closeY;
+    private static final String text = "For";
     private static Float MARGIN_LEFT = 100.f;
     private static Float MARGIN_RIGHT = 10.f;
     private static Float HOLE_HEIGHT = 25.f;
@@ -55,6 +57,15 @@ public class ForBlock extends InstructionBlock {
     }
     public Boolean hasInBlock() {
         return inBlock != null;
+    }
+
+    private void drawText() {
+        Vector2 textSize = MeasureTextEx(FontUtil.getFont(), text, FontUtil.getWorldFontSize(), 0);
+        textSize.y(textSize.y() * 3.f / 4.f);
+        float textMarginX = BASE_HEIGHT / 2.f;
+        float textMarginY = (getHeight() - textSize.y()) / 2.f;
+        Vector2 textPos = Vector2Zero().x(getPosX() + textMarginX).y(getPosY() + textMarginY);
+        DrawTextEx(FontUtil.getFont(), text, textPos, FontUtil.getWorldFontSize(), 0, WHITE);
     }
 
 	@Override
@@ -92,10 +103,7 @@ public class ForBlock extends InstructionBlock {
             color
         );
         drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
-        float fontMarginX = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
-        DrawTextEx(FontUtil.getFont(), "For", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+        drawText();
 	}
 
     @Override

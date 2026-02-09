@@ -3,6 +3,7 @@ package blocklang.blocks.control;
 import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
@@ -28,8 +29,10 @@ public class IfElseBlock extends InstructionBlock {
     private Float middleY;
     private Float closeHeight;
     private Float closeY;
+    private static final String text1 = "If";
+    private static final String text2 = "Else";
     private static Float MARGIN_LEFT = 40.f;
-    private static Float MARGIN_RIGHT = 60.f;
+    private static Float MARGIN_RIGHT = 10.f;
     private static Float HOLE_HEIGHT = 25.f;
 
     public IfElseBlock(Float x, Float y) {
@@ -74,6 +77,22 @@ public class IfElseBlock extends InstructionBlock {
         return inFalseBlock != null;
     }
 
+    private void drawText() {
+        Vector2 text1Size = MeasureTextEx(FontUtil.getFont(), text1, FontUtil.getWorldFontSize(), 0);
+        text1Size.y(text1Size.y() * 3.f / 4.f);
+        float text1MarginX = BASE_HEIGHT / 2.f;
+        float text1MarginY = (getHeight() - text1Size.y()) / 2.f;
+        Vector2 text1Pos = Vector2Zero().x(getPosX() + text1MarginX).y(getPosY() + text1MarginY);
+        DrawTextEx(FontUtil.getFont(), text1, text1Pos, FontUtil.getWorldFontSize(), 0, WHITE);
+
+        Vector2 text2Size = MeasureTextEx(FontUtil.getFont(), text1, FontUtil.getWorldFontSize(), 0);
+        text2Size.y(text2Size.y() * 3.f / 4.f);
+        float text2MarginX = BASE_HEIGHT / 2.f;
+        float text2MarginY = (middleHeight - text2Size.y()) / 2.f;
+        Vector2 text2Pos = Vector2Zero().x(getPosX() + text2MarginX).y(middleY + text2MarginY);
+        DrawTextEx(FontUtil.getFont(), text2, text2Pos, FontUtil.getWorldFontSize(), 0, WHITE);
+    }
+
 	@Override
 	public void draw() {
         Color borderColor = new Color();
@@ -112,14 +131,7 @@ public class IfElseBlock extends InstructionBlock {
         );
         drawRectangle(getPosX() + border, middleY + border, width - 2.f * border, middleHeight - 2.f * border, middleRoundness, color);
         drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
-        float text1MarginX = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        float text1MarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        Vector2 text1Pos = Vector2Zero().x(getPosX() + text1MarginX).y(getPosY() + text1MarginY);
-        DrawTextEx(FontUtil.getFont(), "If", text1Pos, FontUtil.getWorldFontSize(), 0, WHITE);
-        float text2MarginX = (middleHeight - FontUtil.getWorldFontSize()) / 2.f;
-        float text2MarginY = (middleHeight - FontUtil.getWorldFontSize()) / 2.f;
-        Vector2 text2Pos = Vector2Zero().x(getPosX() + text2MarginX).y(middleY + text2MarginY);
-        DrawTextEx(FontUtil.getFont(), "Else", text2Pos, FontUtil.getWorldFontSize(), 0, WHITE);
+        drawText();
 	}
 
     @Override

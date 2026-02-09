@@ -2,8 +2,6 @@ package blocklang;
 
 import static com.raylib.Raylib.*;
 
-import org.bytedeco.javacpp.IntPointer;
-
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
 
@@ -44,7 +42,7 @@ public class Main {
         float timerFontReload = 1.f;
         while (!WindowShouldClose()) {
             timerFontReload += GetFrameTime();
-            if (shouldUpdateFont && timerFontReload > 3.f) {
+            if (shouldUpdateFont && timerFontReload > 2.f) {
                 FontUtil.refreshFont(camera);
                 timerFontReload = 0.f;
                 shouldUpdateFont = false;

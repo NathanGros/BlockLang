@@ -3,6 +3,7 @@ package blocklang.blocks.operators;
 import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
@@ -20,6 +21,7 @@ import blocklang.blocks.PositionnedBlock;
  */
 public class NotBlock extends BooleanBlock {
     private BooleanSlot booleanSlot;
+    private static final String text = "not";
     private static Float LEFT_MARGIN = 40.f;
 
     public NotBlock(Float posX, Float posY) {
@@ -55,6 +57,15 @@ public class NotBlock extends BooleanBlock {
         return booleanSlot.isTrue();
 	}
 
+    private void drawText() {
+        Vector2 textSize = MeasureTextEx(FontUtil.getFont(), text, FontUtil.getWorldFontSize(), 0);
+        textSize.y(textSize.y() * 3.f / 4.f);
+        float textMarginX = BASE_HEIGHT / 2.f;
+        float textMarginY = (getHeight() - textSize.y()) / 2.f;
+        Vector2 textPos = Vector2Zero().x(getPosX() + textMarginX).y(getPosY() + textMarginY);
+        DrawTextEx(FontUtil.getFont(), text, textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+    }
+
 	@Override
 	public void draw() {
         Color borderColor = new Color();
@@ -71,10 +82,7 @@ public class NotBlock extends BooleanBlock {
         Float borderX = borderY * (float) Math.sqrt(2);
         drawHexagon(getPosX(), getPosY(), width, height, borderColor);
         drawHexagon(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
-        float fontMarginX = BASE_HEIGHT / 2.f;
-        float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
-        DrawTextEx(FontUtil.getFont(), "not", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+        drawText();
 	}
 
     @Override

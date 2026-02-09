@@ -3,6 +3,7 @@ package blocklang.blocks.operators;
 import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
@@ -21,6 +22,7 @@ import blocklang.blocks.ValueSlot;
 public class AddBlock extends ValueBlock {
     private ValueBlock value1;
     private ValueBlock value2;
+    private static final String text = "+";
     private static Float CENTER_WIDTH = 20.f;
 
     public AddBlock(Float posX, Float posY) {
@@ -79,6 +81,15 @@ public class AddBlock extends ValueBlock {
         return value1.getFloatValue() + value2.getFloatValue();
 	}
 
+    private void drawText() {
+        Vector2 textSize = MeasureTextEx(FontUtil.getFont(), text, FontUtil.getWorldFontSize(), 0);
+        textSize.y(textSize.y() * 3.f / 4.f);
+        float textMarginX = (value1.getPosX() + value2.getPosX() + value1.getWidth() - textSize.x()) / 2.f - getPosX();
+        float textMarginY = (getHeight() - textSize.y()) / 2.f;
+        Vector2 textPos = Vector2Zero().x(getPosX() + textMarginX).y(getPosY() + textMarginY);
+        DrawTextEx(FontUtil.getFont(), text, textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+    }
+
 	@Override
 	public void draw() {
         Color borderColor = new Color();
@@ -95,10 +106,7 @@ public class AddBlock extends ValueBlock {
         Float borderX = borderY * (float) Math.sqrt(2);
         drawOval(getPosX(), getPosY(), width, height, borderColor);
         drawOval(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
-        float fontMarginX = value1.getPosX() - getPosX() + value1.getWidth() + CENTER_WIDTH / 2.f;
-        float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
-        DrawTextEx(FontUtil.getFont(), "+", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+        drawText();
 	}
 
     @Override

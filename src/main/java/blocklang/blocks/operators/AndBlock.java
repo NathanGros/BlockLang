@@ -3,6 +3,7 @@ package blocklang.blocks.operators;
 import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
+import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
 import com.raylib.Raylib.Color;
@@ -21,6 +22,7 @@ import blocklang.blocks.PositionnedBlock;
 public class AndBlock extends BooleanBlock {
     private BooleanSlot booleanSlot1;
     private BooleanSlot booleanSlot2;
+    private static final String text = "and";
     private static Float CENTER_WIDTH = 40.f;
 
     public AndBlock(Float posX, Float posY) {
@@ -76,6 +78,15 @@ public class AndBlock extends BooleanBlock {
         return booleanSlot1.isTrue() && booleanSlot2.isTrue();
 	}
 
+    private void drawText() {
+        Vector2 textSize = MeasureTextEx(FontUtil.getFont(), text, FontUtil.getWorldFontSize(), 0);
+        textSize.y(textSize.y() * 3.f / 4.f);
+        float textMarginX = (booleanSlot1.getPosX() + booleanSlot2.getPosX() + booleanSlot1.getWidth() - textSize.x()) / 2.f - getPosX();
+        float textMarginY = (getHeight() - textSize.y()) / 2.f;
+        Vector2 textPos = Vector2Zero().x(getPosX() + textMarginX).y(getPosY() + textMarginY);
+        DrawTextEx(FontUtil.getFont(), text, textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+    }
+
 	@Override
 	public void draw() {
         Color borderColor = new Color();
@@ -92,10 +103,7 @@ public class AndBlock extends BooleanBlock {
         Float borderX = borderY * (float) Math.sqrt(2);
         drawHexagon(getPosX(), getPosY(), width, height, borderColor);
         drawHexagon(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
-        float fontMarginX = booleanSlot1.getPosX() - getPosX() + booleanSlot1.getWidth() + CENTER_WIDTH / 2.f;
-        float fontMarginY = (getHeight() - FontUtil.getWorldFontSize()) / 2.f;
-        Vector2 textPos = Vector2Zero().x(getPosX() + fontMarginX).y(getPosY() + fontMarginY);
-        DrawTextEx(FontUtil.getFont(), "and", textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+        drawText();
 	}
 
     @Override
