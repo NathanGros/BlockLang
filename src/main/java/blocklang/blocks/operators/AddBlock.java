@@ -1,15 +1,14 @@
 package blocklang.blocks.operators;
 
-import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
 import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
-import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
+import blocklang.Colors;
 import blocklang.FontUtil;
 import blocklang.blocks.Position;
 import blocklang.blocks.PositionnedBlock;
@@ -87,25 +86,15 @@ public class AddBlock extends ValueBlock {
         float textMarginX = (value1.getPosX() + value2.getPosX() + value1.getWidth() - textSize.x()) / 2.f - getPosX();
         float textMarginY = (getHeight() - textSize.y()) / 2.f;
         Vector2 textPos = Vector2Zero().x(getPosX() + textMarginX).y(getPosY() + textMarginY);
-        DrawTextEx(FontUtil.getFont(), text, textPos, FontUtil.getWorldFontSize(), 0, WHITE);
+        DrawTextEx(FontUtil.getFont(), text, textPos, FontUtil.getWorldFontSize(), 0, Colors.getBlockTextColor());
     }
 
 	@Override
 	public void draw() {
-        Color borderColor = new Color();
-        borderColor.r((byte) 71);
-        borderColor.g((byte) 154);
-        borderColor.b((byte) 71);
-        borderColor.a((byte) 255);
-        Color color = new Color();
-        color.r((byte) 89);
-        color.g((byte) 192);
-        color.b((byte) 89);
-        color.a((byte) 255);
         Float borderY = 1.f;
         Float borderX = borderY * (float) Math.sqrt(2);
-        drawOval(getPosX(), getPosY(), width, height, borderColor);
-        drawOval(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, color);
+        drawOval(getPosX(), getPosY(), width, height, Colors.getOperatorsBorderColor());
+        drawOval(getPosX() + borderX, getPosY() + borderY, width - 2.f * borderX, height - 2.f * borderY, Colors.getOperatorsColor());
         drawText();
 	}
 

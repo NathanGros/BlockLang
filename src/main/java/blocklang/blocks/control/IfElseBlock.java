@@ -1,15 +1,14 @@
 package blocklang.blocks.control;
 
-import static com.raylib.Colors.WHITE;
 import static com.raylib.Raylib.CheckCollisionPointRec;
 import static com.raylib.Raylib.DrawTextEx;
 import static com.raylib.Raylib.MeasureTextEx;
 import static com.raylib.Raylib.Vector2Zero;
 
-import com.raylib.Raylib.Color;
 import com.raylib.Raylib.Rectangle;
 import com.raylib.Raylib.Vector2;
 
+import blocklang.Colors;
 import blocklang.FontUtil;
 import blocklang.blocks.BlockType;
 import blocklang.blocks.BooleanBlock;
@@ -83,54 +82,44 @@ public class IfElseBlock extends InstructionBlock {
         float text1MarginX = BASE_HEIGHT / 2.f;
         float text1MarginY = (getHeight() - text1Size.y()) / 2.f;
         Vector2 text1Pos = Vector2Zero().x(getPosX() + text1MarginX).y(getPosY() + text1MarginY);
-        DrawTextEx(FontUtil.getFont(), text1, text1Pos, FontUtil.getWorldFontSize(), 0, WHITE);
+        DrawTextEx(FontUtil.getFont(), text1, text1Pos, FontUtil.getWorldFontSize(), 0, Colors.getBlockTextColor());
 
         Vector2 text2Size = MeasureTextEx(FontUtil.getFont(), text1, FontUtil.getWorldFontSize(), 0);
         text2Size.y(text2Size.y() * 3.f / 4.f);
         float text2MarginX = BASE_HEIGHT / 2.f;
         float text2MarginY = (middleHeight - text2Size.y()) / 2.f;
         Vector2 text2Pos = Vector2Zero().x(getPosX() + text2MarginX).y(middleY + text2MarginY);
-        DrawTextEx(FontUtil.getFont(), text2, text2Pos, FontUtil.getWorldFontSize(), 0, WHITE);
+        DrawTextEx(FontUtil.getFont(), text2, text2Pos, FontUtil.getWorldFontSize(), 0, Colors.getBlockTextColor());
     }
 
 	@Override
 	public void draw() {
-        Color borderColor = new Color();
-        borderColor.r((byte) 205);
-        borderColor.g((byte) 137);
-        borderColor.b((byte) 20);
-        borderColor.a((byte) 255);
-        Color color = new Color();
-        color.r((byte) 255);
-        color.g((byte) 171);
-        color.b((byte) 25);
-        color.a((byte) 255);
         Float border = 1.f;
         Float roundness = CORNER_RADIUS / (height / 2.f);
         Float middleRoundness = CORNER_RADIUS / (middleHeight / 2.f);
         Float closeRoundness = CORNER_RADIUS / (closeHeight / 2.f);
-        drawRectangle(getPosX(), getPosY(), width, height, roundness, borderColor);
+        drawRectangle(getPosX(), getPosY(), width, height, roundness, Colors.getControlBorderColor());
         drawRectangle(
             getPosX(),
             getPosY() + height / 2.f,
             INDENTATION,
             closeY + closeHeight / 2.f - (getPosY() + height / 2.f),
             roundness,
-            borderColor
+            Colors.getControlBorderColor()
         );
-        drawRectangle(getPosX(), middleY, width, middleHeight, middleRoundness, borderColor);
-        drawRectangle(getPosX(), closeY, width, closeHeight, closeRoundness, borderColor);
-        drawRectangle(getPosX() + border, getPosY() + border, width - 2.f * border, height - 2.f * border, roundness, color);
+        drawRectangle(getPosX(), middleY, width, middleHeight, middleRoundness, Colors.getControlBorderColor());
+        drawRectangle(getPosX(), closeY, width, closeHeight, closeRoundness, Colors.getControlBorderColor());
+        drawRectangle(getPosX() + border, getPosY() + border, width - 2.f * border, height - 2.f * border, roundness, Colors.getControlColor());
         drawRectangle(
             getPosX() + border,
             getPosY() + height / 2.f + border,
             INDENTATION - 2.f * border,
             closeY + closeHeight / 2.f - (getPosY() + height / 2.f),
             roundness,
-            color
+            Colors.getControlColor()
         );
-        drawRectangle(getPosX() + border, middleY + border, width - 2.f * border, middleHeight - 2.f * border, middleRoundness, color);
-        drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, color);
+        drawRectangle(getPosX() + border, middleY + border, width - 2.f * border, middleHeight - 2.f * border, middleRoundness, Colors.getControlColor());
+        drawRectangle(getPosX() + border, closeY + border, width - 2.f * border, closeHeight - 2.f * border, closeRoundness, Colors.getControlColor());
         drawText();
 	}
 
