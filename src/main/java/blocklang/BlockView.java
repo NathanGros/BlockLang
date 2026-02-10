@@ -196,7 +196,7 @@ public class BlockView {
     }
 
     public void refreshSize() {
-        viewX = (int) (1.f / 5.f * GetScreenWidth());
+        viewX = GetScreenWidth() / 5;
         viewY = 0;
         Vector2 newOffset = new Vector2();
         newOffset.x((GetScreenWidth() + viewX) / 2.f);

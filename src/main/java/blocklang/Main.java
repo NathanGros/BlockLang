@@ -24,12 +24,15 @@ public class Main {
         BlockView blockView = new BlockView();
         blockView.runAll();
 
+        BlockList blockList = new BlockList();
+
         SetConfigFlags(FLAG_MSAA_4X_HINT);
         SetConfigFlags(FLAG_WINDOW_RESIZABLE);
         InitWindow(screenWidth, screenHeight, "BlockLang");
         SetTargetFPS(60);
 
         blockView.refreshSize();
+        blockList.refreshSize();
 
         while (!WindowShouldClose()) {
             blockView.updateFontTimer();
@@ -37,6 +40,7 @@ public class Main {
 
             if (IsWindowResized()) {
                 blockView.refreshSize();
+                blockList.refreshSize();
             }
 
             blockView.updateZoom();
@@ -53,6 +57,7 @@ public class Main {
             BeginDrawing();
                 ClearBackground(Colors.getBackgroundColor());
                 blockView.drawAll();
+                blockList.drawAll();
             EndDrawing();
         }
         // De-Initialization
