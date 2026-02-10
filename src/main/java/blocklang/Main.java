@@ -1,125 +1,58 @@
 package blocklang;
 
-import static com.raylib.Raylib.*;
-
-import blocklang.blocks.Position;
-import blocklang.blocks.PositionnedBlock;
-
-import static com.raylib.Colors.*;
+import static com.raylib.Raylib.BeginDrawing;
+import static com.raylib.Raylib.ClearBackground;
+import static com.raylib.Raylib.CloseWindow;
+import static com.raylib.Raylib.EndDrawing;
+import static com.raylib.Raylib.FLAG_MSAA_4X_HINT;
+import static com.raylib.Raylib.FLAG_WINDOW_RESIZABLE;
+import static com.raylib.Raylib.InitWindow;
+import static com.raylib.Raylib.IsMouseButtonPressed;
+import static com.raylib.Raylib.IsMouseButtonReleased;
+import static com.raylib.Raylib.IsWindowResized;
+import static com.raylib.Raylib.MOUSE_BUTTON_LEFT;
+import static com.raylib.Raylib.SetConfigFlags;
+import static com.raylib.Raylib.SetTargetFPS;
+import static com.raylib.Raylib.UnloadFont;
+import static com.raylib.Raylib.WindowShouldClose;
 
 public class Main {
     public static void main(String[] args) {
-        // Initialization
         int screenWidth = 800;
         int screenHeight = 450;
 
         BlockView blockView = new BlockView();
-        blockView.positionAll();
         blockView.runAll();
-
-        Boolean dragScreenMode = false;
-        Boolean moveSelectedBlockMode = false;
-        PositionnedBlock selectedBlock = null;
-        Vector2 mousePosition = GetMousePosition();
 
         SetConfigFlags(FLAG_MSAA_4X_HINT);
         SetConfigFlags(FLAG_WINDOW_RESIZABLE);
         InitWindow(screenWidth, screenHeight, "BlockLang");
-
-        Camera2D camera = new Camera2D()
-            .offset(new Vector2().x(screenWidth / 2).y(screenHeight / 2))
-            .target(Vector2Zero())
-            .rotation(0.0f)
-            .zoom(2.0f);
-
         SetTargetFPS(60);
 
-        // Font
-        FontUtil.setWantedWorldFontSize(15.f);
-        FontUtil.refreshFont(camera);
-        boolean shouldUpdateFont = false;
+        blockView.refreshSize();
 
-        float timerFontReload = 1.f;
         while (!WindowShouldClose()) {
-            timerFontReload += GetFrameTime();
-            if (shouldUpdateFont && timerFontReload > 2.f) {
-                FontUtil.refreshFont(camera);
-                timerFontReload = 0.f;
-                shouldUpdateFont = false;
-            }
+            blockView.updateFontTimer();
+            blockView.reloadFontIfNeeded();
 
             if (IsWindowResized()) {
-                screenWidth = GetScreenWidth();
-                screenHeight = GetScreenHeight();
-                camera.offset(new Vector2().x(screenWidth / 2).y(screenHeight / 2));
+                blockView.refreshSize();
             }
 
-            // Update
-            float dt = GetFrameTime();
-            Vector2 cameraPos = camera.offset();
-            Float mouseWheelMovementY = GetMouseWheelMoveV().y();
-            if (mouseWheelMovementY != 0.f) {
-                if (mouseWheelMovementY > 0) {
-                    camera.zoom(camera.zoom() * 1.3f);
-                } else {
-                    camera.zoom(camera.zoom() / 1.3f);
-                }
-                timerFontReload = 0.f;
-                shouldUpdateFont = true;
-            }
-            if (camera.zoom() < 0.3f)
-                camera.zoom(0.3f);
-            if (camera.zoom() > 3.f)
-                camera.zoom(3.f);
+            blockView.updateZoom();
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                selectedBlock = blockView.selectBlock(GetScreenToWorld2D(GetMousePosition(), camera));
-                if (selectedBlock == null) {
-                    dragScreenMode = true;
-                    mousePosition = GetMousePosition();
-                } else {
-                    moveSelectedBlockMode = true;
-                    mousePosition = GetMousePosition();
-                }
+                blockView.handleLeftClick();
             }
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-                if (dragScreenMode) {
-                    dragScreenMode = false;
-                }
-                if (moveSelectedBlockMode) {
-                    moveSelectedBlockMode = false;
-                    blockView.insertBlockAtPos(selectedBlock, GetScreenToWorld2D(mousePosition, camera));
-                    selectedBlock = null;
-                }
+                blockView.handleLeftRelease();
             }
-            if (dragScreenMode) {
-                Vector2 newMousePosition = GetMousePosition();
-                Vector2 oldMouseWorldPosition = GetScreenToWorld2D(mousePosition, camera);
-                Vector2 newMouseWorldPosition = GetScreenToWorld2D(newMousePosition, camera);
-                camera.target(Vector2Add(Vector2Subtract(camera.target(), newMouseWorldPosition), oldMouseWorldPosition));
-                mousePosition = newMousePosition;
-            }
-            if (moveSelectedBlockMode) {
-                Vector2 newMousePosition = GetMousePosition();
-                Vector2 oldMouseWorldPosition = GetScreenToWorld2D(mousePosition, camera);
-                Vector2 newMouseWorldPosition = GetScreenToWorld2D(newMousePosition, camera);
-                Vector2 moveVector = Vector2Subtract(newMouseWorldPosition, oldMouseWorldPosition);
-                Vector2 oldBlockPosition = new Vector2();
-                oldBlockPosition.x(selectedBlock.getPosX());
-                oldBlockPosition.y(selectedBlock.getPosY());
-                Vector2 newBlockPosition = Vector2Add(oldBlockPosition, moveVector);
-                selectedBlock.positionWithChildren(new Position(newBlockPosition.x(), newBlockPosition.y()));
-                mousePosition = newMousePosition;
-            }
+            blockView.updateWhileDragScreenMode();
+            blockView.updateWhileDragBlockMode();
 
             // Draw
             BeginDrawing();
-                ClearBackground(RAYWHITE);
-                BeginMode2D(camera);
+                ClearBackground(Colors.getBackgroundColor());
                 blockView.drawAll();
-                if (selectedBlock != null) {
-                    selectedBlock.drawWithChildren();
-                }
-                EndMode2D();
             EndDrawing();
         }
         // De-Initialization

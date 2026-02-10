@@ -50,7 +50,7 @@ public class FontUtil {
         return worldFontSize;
     }
 
-    public static void refreshFont(Camera2D camera) {
+    public static void reloadFont(Camera2D camera) {
         if (font != null)
             UnloadFont(font);
         Vector2 screenPos1 = GetWorldToScreen2D(Vector2Zero(), camera);

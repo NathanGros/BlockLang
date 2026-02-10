@@ -14,6 +14,9 @@ public class Colors {
     private static final Color operatorsBorderColor = new Color().r((byte) 71).g((byte) 154).b((byte) 71).a((byte) 255);
 	private static final Color whiteTextColor = new Color().r((byte) 255).g((byte) 255).b((byte) 255).a((byte) 255);
     private static final Color blackTextColor = new Color().r((byte) 0).g((byte) 0).b((byte) 0).a((byte) 255);
+    private static final Color blockViewBackgroundColor = new Color().r((byte) 230).g((byte) 230).b((byte) 230).a((byte) 255);
+    private static final Color blockListBackgroundColor = new Color().r((byte) 200).g((byte) 200).b((byte) 200).a((byte) 255);
+    private static final Color backgroundColor = new Color().r((byte) 255).g((byte) 255).b((byte) 255).a((byte) 255);
 
 	public static Color getControlColor() {
 		return controlColor;
@@ -35,5 +38,14 @@ public class Colors {
 	}
 	public static Color getBlockTextColor() {
 		return whiteTextColor;
+	}
+	public static Color getBlockViewBackgroundColor() {
+		return blockViewBackgroundColor;
+	}
+	public static Color getBlockListBackgroundColor() {
+		return blockListBackgroundColor;
+	}
+	public static Color getBackgroundColor() {
+		return backgroundColor;
 	}
 }
